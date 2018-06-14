@@ -45,19 +45,21 @@ $GLOBALS['router']->respond(function () {
     /** @var \PicoDb\Database $odm */
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $username)->findOne();
-    if(is_null($account)) {
+    if (is_null($account)) {
         return;
     }
 
     // Verify the signature
     $signer = new Sha256();
     $pubkey = new Key($account['pubkey']);
-    $valid  = $token->verify($signer,$pubkey);
+    $valid  = $token->verify($signer, $pubkey);
+    if (!$valid) {
+        return;
+    }
 
-
-    var_dump($raw);
-    var_dump($account);
-    var_dump($signer);
-    var_dump($pubkey);
-    var_dump($valid);
+    // Insert the detected auth into the request
+    $_REQUEST['auth'] = array_merge($token->getClaims(), array(
+        'account' => $account,
+        'token'   => $raw,
+    ));
 });
