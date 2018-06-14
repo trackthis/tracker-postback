@@ -22,6 +22,6 @@
     "pimple/pimple": "@stable",
     "finwo/property-accessor": "^0.1.4",
     "lcobucci/jwt": "3.2",
-    "mdanter/ecc": "dev-master"
+    "mdanter/ecc": "0.3.x"
   }
 }

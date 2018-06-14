@@ -2,6 +2,8 @@
 
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Ecdsa\Sha256;
+use Lcobucci\JWT\Signer\Key;
 
 $GLOBALS['router']->respond(function () {
     global $_SERVICE;
@@ -43,9 +45,19 @@ $GLOBALS['router']->respond(function () {
     /** @var \PicoDb\Database $odm */
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $username)->findOne();
+    if(is_null($account)) {
+        return;
+    }
+
+    // Verify the signature
+    $signer = new Sha256();
+    $pubkey = new Key($account['pubkey']);
+    $valid  = $token->verify($signer,$pubkey);
 
 
     var_dump($raw);
     var_dump($account);
-    var_dump($token->getHeaders());
+    var_dump($signer);
+    var_dump($pubkey);
+    var_dump($valid);
 });
