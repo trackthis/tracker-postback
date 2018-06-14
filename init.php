@@ -4,10 +4,12 @@
 $f      = fopen('php://stdin', 'r');
 $line   = str_replace("\r",'',str_replace("\r\n", "\n", fgets($f)));
 $tokens = explode(' ', $line);
+$docroot = __DIR__.DS.'web';
 $_SERVER['REQUEST_METHOD'] = array_shift($tokens);
 $_SERVER['REQUEST_URI']    = array_shift($tokens);
 
 // Prevent loops
+unset($_SERVER['argv']);
 unset($_SERVER['argc']);
 
 // Keep it simple
@@ -24,15 +26,15 @@ $mimeTypes = array(
     'html' => 'text/html',
     'js'   => 'text/javascript',
 );
-$status      = 200;
-$headers     = array();
+$_REQUEST['status']  = 200;
+$_REQUEST['headers'] = array();
 ob_start(function( $buffer ) {
-    global $status;
     global $statusCodes;
-    global $headers;
-    $extra  = 'HTTP/1.0 '.$status.' '.$statusCodes[$status].PHP_EOL;
+    $extra  = 'HTTP/1.0 '.$_REQUEST['status'].' '.$statusCodes[$_REQUEST['status']].PHP_EOL;
     $extra .= 'Content-Length: '.strlen($buffer) . PHP_EOL;
-    foreach ($headers as $header) $extra .= $header . PHP_EOL;
+    foreach ($_REQUEST['headers'] as $header) $extra .= $header . PHP_EOL;
+    $nativeHeaders = php_sapi_name() === 'cli' ? xdebug_get_headers() : headers_list();
+    foreach ($nativeHeaders as $header) $extra .= $header . PHP_EOL;
     $extra .= PHP_EOL;
     return $extra . $buffer;
 });
@@ -62,7 +64,7 @@ while(($line=str_replace("\r",'',str_replace("\r\n", "\n", fgets($f))))!="\n") {
 
 // Read query string
 $params = explode('?', $_SERVER['REQUEST_URI'], 2);
-$path   = trim(rtrim(__DIR__,'/').'/web/'.trim(array_shift($params),'/'));
+$path   = trim($docroot.DS.trim(array_shift($params),'/'));
 $ext    = @array_pop(explode('.',$path));
 if(!function_exists('set_deep')) {
     function set_deep($path, &$dataHolder = array(), $value = null) {
@@ -116,5 +118,12 @@ if(is_file($path)) {
     }
 }
 
+// Check for an app
+if(is_file(__DIR__ . DS . 'src' . DS . 'app.php')) {
+    include __DIR__ . DS . 'src' . DS . 'app.php';
+    exit(0);
+}
+
+// Too bad
 $status = 404;
 die('We could not find the page you\'re looking for.'.PHP_EOL);

@@ -5,7 +5,8 @@ use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Ecdsa\Sha256;
 use Lcobucci\JWT\Signer\Key;
 
-$GLOBALS['router']->respond(function () {
+/** @var \Klein\Klein $router */
+$router->respond(function () {
     global $_SERVICE;
     $_REQUEST['auth'] = false;
 
@@ -59,8 +60,8 @@ $GLOBALS['router']->respond(function () {
     }
 
     // Insert the detected auth into the request
-    $_REQUEST['auth'] = array_merge($token->getClaims(), array(
+    $_REQUEST['auth'] = array(
         'account' => $account,
         'token'   => $raw,
-    ));
+    );
 });
