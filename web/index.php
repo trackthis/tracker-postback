@@ -9,45 +9,29 @@ require implode(DIRECTORY_SEPARATOR, array(
 ));
 
 // Definitions
-define('DS', DIRECTORY_SEPARATOR);
-define('APPROOT', rtrim(dirname(__DIR__),DS));
-
-// Keep the code somewhat short
-use \Finwo\Framework\Config\Config;
-
-// Initialize router
-$router = new Klein\Klein();
-
-// Initialize middleware
-
-
-//// Initialize services
-//$services = array();
-//foreach( Config::get('services') as $name => $serviceClass ) {
-//    if(!class_exists($serviceClass)) continue;
-//    $service = new $serviceClass();
-//    if(!($service instanceof AbstractService)) continue;
-//    $services[$name] = $service;
-//}
-//Config::set('service', $services);
-
-
-
-//// Initialize registered bundles
-//$bundles = array();
-//foreach( Config::get('bundles') as $bundleName ) {
-//    $class = $bundleName . "\\" . @array_pop(explode("\\",$bundleName));
-//    if(!class_exists($class)) continue;
-//    $bundle = new $class($router);
-//    if (!($bundle instanceof AbstractBundle)) continue;
-//    array_push($bundles, new $class($router));
-//}
-//Config::set( 'bundles', $bundles );
+if(!defined('DS')) define('DS', DIRECTORY_SEPARATOR);
+if(!defined('APPROOT')) define('APPROOT', rtrim(dirname(__DIR__),DS));
 
 // Handle pre-forked start
 if(isset($_SERVER['argc'])) {
     require(APPROOT.DS.'init.php');
 }
 
+// Keep the code somewhat short
+use \Finwo\Framework\Config\Config;
+
+// Initialize router
+$GLOBALS['router'] = new Klein\Klein();
+
+// Initialize middleware
+foreach(glob(APPROOT.DS.'middleware'.DS.'**'.DS.'*.php') as $filename) {
+    require_once($filename);
+}
+
+// Initialize controllers
+foreach(glob(APPROOT.DS.'controller'.DS.'**'.DS.'*.php') as $filename) {
+    require_once($filename);
+}
+
 // Kickoff the request
-$router->dispatch();
+$GLOBALS['router']->dispatch();
