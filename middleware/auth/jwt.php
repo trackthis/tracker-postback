@@ -7,6 +7,7 @@ use Lcobucci\JWT\Signer\Key;
 
 $GLOBALS['router']->respond(function () {
     global $_SERVICE;
+    $_REQUEST['auth'] = false;
 
     // Detect auth
     $raw = false;
