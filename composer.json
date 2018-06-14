@@ -18,6 +18,10 @@
     "klein/klein": "^2.1",
     "netresearch/jsonmapper": "^1.1",
     "finwo/datafile": "^0.0.2",
-    "fguillot/picodb": "@stable"
+    "fguillot/picodb": "@stable",
+    "pimple/pimple": "@stable",
+    "finwo/property-accessor": "^0.1.4",
+    "lcobucci/jwt": "3.2",
+    "mdanter/ecc": "dev-master"
   }
 }
