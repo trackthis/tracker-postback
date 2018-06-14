@@ -1,5 +1,6 @@
 database:
-  - host: localhost
-  - name: postbacktracker
-  - user: postback
-  - pass: SuperSecurePassword
+  driver: mysql
+  hostname: localhost
+  database: postbacktracker
+  username: postback
+  password: SuperSecurePassword
