@@ -23,6 +23,7 @@
     "finwo/property-accessor": "^0.1.4",
     "lcobucci/jwt": "3.2",
     "mdanter/ecc": "0.3.x",
-    "xamin/handlebars.php": "@stable"
+    "xamin/handlebars.php": "@stable",
+    "heroku/heroku-buildpack-php": "dev-master"
   }
 }
