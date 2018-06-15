@@ -68,6 +68,7 @@ $router->respond(function () {
     }
 
     // Insert the detected auth into the request
+    $account['settings'] = json_decode($account['settings'],true);
     $_REQUEST['auth'] = array(
         'account' => $account,
         'method'  => 'JWT',

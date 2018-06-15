@@ -159,7 +159,6 @@ $('#loginform').each(function(el) {
     setTimeout(function() {
 
       // Generate full KP
-      console.log('EC:',EC);
       var ec  = new EC('p256'),
           pri = generateSecret(name,pass).toString('hex'),
           kp  = ec.keyFromPrivate(pri);
