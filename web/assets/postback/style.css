@@ -81,3 +81,7 @@ textarea:focus, input:focus, button:focus {
 .form-actions > button:active {
     background : #AAA;
 }
+.form-actions > button:disabled {
+    border-color : #888;
+    color        : #888;
+}

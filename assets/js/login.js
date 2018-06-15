@@ -159,6 +159,7 @@ $('#loginform').each(function(el) {
     setTimeout(function() {
 
       // Generate full KP
+      console.log('EC:',EC);
       var ec  = new EC('p256'),
           pri = generateSecret(name,pass).toString('hex'),
           kp  = ec.keyFromPrivate(pri);
@@ -178,23 +179,16 @@ $('#loginform').each(function(el) {
 
       // Dump public key to console
       // Debug purposes
-      var publicKey = '-----BEGIN PUBLIC KEY-----\n' + Buffer.from(kp.getPublic('hex'),'hex').toString('base64') + '\n-----END PUBLIC KEY-----';
-      console.log(publicKey);
+      console.log('pub:',kp.getPublic('hex'));
+      console.log('token:',signed);
+
+      // var publicKey = '-----BEGIN PUBLIC KEY-----\n' + Buffer.from(kp.getPublic('hex'),'hex').toString('base64') + '\n-----END PUBLIC KEY-----';
+      // console.log(publicKey);
 
       // Insert token into GET params
       var q = query.decode((document.location.search||'?').substr(1));
       q.token = signed;
       document.location.search = query.encode(q);
-
-      // // Add the token to the url
-      // document.location.search = document.location.search + ((document.location.search||'').indexOf('?')===0?'&':'?') + 'token=' + signed;
     },10);
-
-    //     pri  = generateSecret(name,pass);
-    // console.log('SUBMIT!!');
-    // console.log('this:',this);
-    // console.log('username:',name);
-    // console.log('password:',pass);
-    // console.log('private:',pri);
   });
 });
