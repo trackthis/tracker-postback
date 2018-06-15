@@ -27,5 +27,8 @@ $router->respond(function () {
 
         header('Content-Type: text/html');
         die($_SERVICE['template']->render('login',[]));
+    } else {
+        var_dump($_REQUEST['auth']);
+        die();
     }
 });

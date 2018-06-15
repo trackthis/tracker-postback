@@ -54,6 +54,13 @@ $router->respond(function () {
     // Verify the signature
     $signer = new Sha256();
     $pubkey = new Key($account['pubkey']);
+
+//    var_dump($raw);
+//    var_dump($username);
+//    var_dump($account);
+//    var_dump($pubkey);
+//    die();
+
     $valid  = $token->verify($signer, $pubkey);
     if (!$valid) {
         return;
