@@ -70,6 +70,7 @@ $router->respond(function () {
     // Insert the detected auth into the request
     $_REQUEST['auth'] = array(
         'account' => $account,
+        'method'  => 'JWT',
         'token'   => $raw,
     );
 });
