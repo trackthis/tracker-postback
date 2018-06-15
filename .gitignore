@@ -3,3 +3,4 @@ vendor/
 .zedstate
 .idea/
 fifo.*
+/tcpd
