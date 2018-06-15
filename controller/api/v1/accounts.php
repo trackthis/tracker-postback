@@ -10,5 +10,5 @@ $router->respond('/admin',function () {
         die($_SERVICE['template']->render('denied',[]));
     }
 
-    die($_SERVICE['template']->render('admin',[]));
+    echo 'Yo, ADMIN';
 });
