@@ -1,0 +1,28 @@
+{
+  "name": "trackthistracker-postback",
+  "version": "0.0.1",
+  "description": "Trackthis Postback tracker ==========================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trackthis/tracker-postback.git"
+  },
+  "author": "Robin Bron <robin@finwo.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trackthis/tracker-postback/issues"
+  },
+  "homepage": "https://github.com/trackthis/tracker-postback#readme",
+  "devDependencies": {
+    "bluebird": "^3.5.1",
+    "browserify": "^16.2.2",
+    "co": "^4.6.0",
+    "esprima": "^4.0.0",
+    "fs-extra": "^6.0.1",
+    "path": "^0.12.7",
+    "through": "^2.3.8"
+  }
+}

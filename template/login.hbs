@@ -1,14 +1,22 @@
 {{>precontent}}
 
-<ul>
-    <li class="card">
-        <!--<img src="/path/to/image.png" alt="">-->
-        <h2>
-            <a href="https://google.com/">Google search</a>
-        </h2>
-        <p>The most common used search engine in the world.</p>
-        <small>By Google</small>
-    </li>
-</ul>
+<main class="centered">
+    <form id="loginform" class="padded loner" onsubmit="return false;">
+
+        <div class="form-input">
+            <input type="text" id="username" />
+            <label for="username">Username</label>
+        </div>
+
+        <div class="form-input">
+            <input type="password" id="password" />
+            <label for="password">Password</label>
+        </div>
+
+        <div class="form-actions">
+            <button>Log in</button>
+        </div>
+    </form>
+</main>
 
 {{>postcontent}}
