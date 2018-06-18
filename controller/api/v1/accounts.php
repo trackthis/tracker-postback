@@ -48,5 +48,31 @@ $router->respond('GET', '/api/v1/accounts/[:username]', function ($request) {
 // Delete an account
 $router->respond('DELETE', '/api/v1/accounts/[:username]', function ($request) {
     global $_SERVICE;
-    die('dinges');
+    $isAdmin   = isset($_REQUEST['auth']['account']['settings']['admin']) ? $_REQUEST['auth']['account']['settings']['admin'] : false;
+    $fetchSelf = $_REQUEST['auth']['account']['username'] === $request->param('username', false);
+    header("Content-Type: application/json");
+
+    // Only admins may delete anyone
+    if (!($fetchSelf || $isAdmin)) {
+        $_REQUEST['status'] = 403;
+        die('{"error":403,"description":"Permission denied"}');
+    }
+
+    // Fetch the account first
+    /** @var \PicoDb\Database $odm */
+    $odm     = $_SERVICE['odm'];
+    $account = $odm->table('account')->eq('username', $request->param('username'))->findOne();
+    if (is_null($account)) {
+        $_REQUEST['status'] = 404;
+        die('{"error":404,"description":"The requested entity could not be found"}');
+    }
+
+    // Delete API tokens & the account itself
+    $result  = true;
+    $result &= $odm->table('token')->eq('username', $account['username'])->remove();
+    $result &= $odm->table('account')->eq('username', $account['username'])->remove();
+
+    // Return the deleted account
+    $account['settings'] = json_decode($account['settings'], true);
+    die(json_encode($account));
 });

@@ -35,10 +35,12 @@ function accountDelete( event, context ) {
 
   _.ajax({
     method : 'DELETE',
-    uri    : "/api/v1/account/" + context.account.username,
+    uri    : "/api/v1/accounts/" + context.account.username,
     data   : data
   }, function(response) {
-    console.log(response);
+    if (response.status === 200) {
+      document.location.reload(true);
+    }
   })
 }
 
