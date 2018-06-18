@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// TODO
+//   Use sockets for performance
+//   right now, this is started as program every time
 var EC     = require('elliptic').ec,
     hash   = process.argv[2],
     pubkey = process.argv[3],
