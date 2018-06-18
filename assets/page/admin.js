@@ -62,8 +62,7 @@ function accountDelete( event, context ) {
 }
 
 function accountEdit( event, context ) {
-  var args = [].slice.call(arguments);
-  console.log(this, args);
+  window.location.href = '/admin/' + context.account.username + '?' + q.encode(data);
 }
 
 rv.data.form.account = { isAdmin: false };

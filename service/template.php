@@ -14,12 +14,23 @@ $_SERVICE['template'] = function ($c) {
                     APPROOT . DS . 'template' . DS . 'partial',
                     array('extension' => 'hbs')
                 ),
+                'helpers' => new \Handlebars\Helpers(array(
+                    'implode' => function() {
+                        var_dump(func_get_args());
+                        return '';
+                    }
+                ))
             ));
         }
 
 
         if ('array' !== gettype($data)) $data = array();
         $data['__pageName'] = $name;
+        $data['__query']    = '';
+        $params             = explode('?', $_SERVER['REQUEST_URI'], 2);
+        array_shift($params);
+        if(count($params)) $data['__query'] = array_shift($params);
+
         return $engine->render($name, $data);
     };
 };
