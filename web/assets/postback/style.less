@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Asap:400,700');
 
+@color-back     : #FFF;
+@color-front    : #000;
+@color-disabled : average( @color-front   , @color-back );
+@color-active   : average( @color-disabled, @color-back );
+@color-focus    : average( @color-active  , @color-back );
+
 /* Basics */
 * {
   -webkit-box-sizing : border-box;
@@ -12,10 +18,12 @@ html, body {
   padding : 0;
 }
 html {
-  font-size : calc(0.8rem + 0.5vw);
+  background : @color-back;
+  color      : @color-front;
+  font-size  : calc(0.8rem + 0.5vw);
 }
 .border {
-  border        : 2px solid #000;
+  border        : 2px solid @color-front;
   border-radius : 0.25rem;
 }
 .padded {
@@ -26,15 +34,12 @@ html {
 }
 
 /* Main layouts */
-main.centered {
-  display                 : -webkit-flex;
-  display                 : flex;
-  -webkit-flex-direction  : row;
-  flex-direction          : row;
-  -webkit-align-items     : center;
-  align-items             : center;
-  -webkit-justify-content : center;
-  justify-content         : center;
+.centered {
+  text-align : center;
+}
+main.centered > * {
+  display    : inline-block;
+  text-align : initial;
 }
 
 /* Form stuff */
@@ -42,10 +47,9 @@ textarea:focus, input:focus, button:focus {
   outline : none;
 }
 .form-input {
+  .border;
   position      : relative;
   padding       : 0.5rem;
-  border        : 2px solid #000;
-  border-radius : 0.25rem;
   margin        : 1rem;
 
   > label {
@@ -69,9 +73,8 @@ textarea:focus, input:focus, button:focus {
   margin   : 1rem;
 
   > button {
-    background    : #FFF;
-    border        : 2px solid #000;
-    border-radius : 0.25rem;
+    .border;
+    background    : @color-back;
     cursor        : pointer;
     display       : block;
     font-size     : 0.8em;
@@ -79,43 +82,40 @@ textarea:focus, input:focus, button:focus {
     width         : 100%;
 
     &:focus, &:hover {
-      background : #E0E0E0;
+      background : @color-focus;
     }
     &:active {
-      background : #AAA;
+      background : @color-active;
     }
     &:disabled {
-      border-color : #888;
-      color        : #888;
+      border-color : @color-disabled;
+      color        : @color-disabled;
     }
   }
 }
 
 /* header */
 header {
-  border-bottom : 2px solid #000;
+  border-bottom : 2px solid @color-front;
   padding       : 0.5rem;
 }
 
 /* content */
 .content {
   padding : 1rem;
-
-  > *:first-child {
-    margin-top : 0;
-  }
-  > * + * {
+  > * + p, p + * { /* lobotomized owl for P and direct siblings */
     margin-top : 1rem;
   }
 }
 hr {
   border        : none;
-  border-bottom : 6px double #000;
+  border-bottom : 6px double @color-front;
 }
 table {
-  width : 100%;
-
+  .border;
+  border-spacing : 0;
+  width          : 100%;
   tr + tr {
-    border-top : 1px solid #888;
+    border-top : 1px solid @color-front;
   }
 }

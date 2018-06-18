@@ -11,26 +11,17 @@
 <main class="centered">
     <div class="content">
         <h2>Users</h2>
-        <span>Select a user to modify or create a new one</span>
+        <p>Select a user to modify or create a new one</p>
 
-        <div>
-            <a href="#!">
-                <i class="material-icons">edit</i>
-                Root
-            </a>
-        </div>
-        <div>
-            <a href="#!">
-                <i class="material-icons">edit</i>
-                Robin Bron
-            </a>
-        </div>
-        <div>
-            <a href="#!">
-                <i class="material-icons">edit</i>
-                Dariusz Dusza
-            </a>
-        </div>
+        <table >
+            <tbody>
+                <tr rv-each-account="api.accounts">
+                    <td width="24px"><a href="#!"><i class="material-icons">delete</i></a></td>
+                    <td width="24px"><a href="#!"><i class="material-icons">edit</i></a></td>
+                    <td>Root</td>
+                </tr>
+            </tbody>
+        </table>
 
     </div>
 </main>

@@ -1,6 +1,6 @@
 module.exports = {
   decode: function( src ) {
-    return src
+    return (( src.substr(0,1) === '?' ) ? src.substr(1) : src)
       .split('&')
       .reduce(function(out,element) {
         var parts     = element.split('='),

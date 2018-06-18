@@ -1,7 +1,7 @@
 <?php
 
 /** @var \Klein\Klein $router */
-$router->respond('/admin',function () {
+$router->respond('/api/v1/accounts',function () {
     global $_SERVICE;
     $isAdmin = isset($_REQUEST['auth']['account']['settings']['admin']) ? $_REQUEST['auth']['account']['settings']['admin'] : false;
 
