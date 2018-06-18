@@ -108,8 +108,21 @@ header {
 /* content */
 .content {
   padding : 1rem;
-  > * + p, p + * { /* lobotomized owl for P and direct siblings */
+  > * + p, p + *,
+  * + .paragraph,
+  .paragraph + * { /* lobotomized owl for P/.paragraph and direct siblings */
     margin-top : 1rem;
+  }
+}
+.valign {
+  > * {
+    float: left;
+    margin-left: 0.25rem;
+  }
+  &:after {
+    display: table;
+    content : "";
+    clear: both;
   }
 }
 hr {
