@@ -2,8 +2,25 @@ window._      = require('../lib/fw');
 window._.ajax = require('../lib/ajax');
 window.rv     = require('../lib/rivets');
 
-var q    = require('../lib/query'),
-    data = q.decode(window.location.search||'');
+var crypto = require('crypto'),
+    EC     = require('elliptic').ec,
+    q      = require('../lib/query'),
+    data   = q.decode(window.location.search||'');
+
+function sha256 (src) {
+  return crypto.createHash('sha256').update(src).digest();
+}
+
+// Generates private key with pbkdf2 (between 1e3 & 1e6 iterations)
+function generateSecret(username, password) {
+  var _hash  = sha256(username).toString('hex'),
+      result = 0;
+  while (_hash.length) {
+    result = ((result * 16) + parseInt(_hash.substr(0, 1), 16)) % (1e6 - 1e3);
+    _hash  = _hash.substr(1);
+  }
+  return crypto.pbkdf2Sync(password,username,result+1e3,64,'sha256');
+}
 
 function fancyDialog(target) {
   if(Array.isArray(target)) return target.map(fancyDialog);
@@ -41,7 +58,7 @@ function accountDelete( event, context ) {
     if (response.status === 200) {
       document.location.reload(true);
     }
-  })
+  });
 }
 
 function accountEdit( event, context ) {
@@ -65,3 +82,65 @@ rv.data.action.newAccountDialog = function( event, context ) {
   fancyDialog(dialog);
   dialog.show();
 };
+
+// Handle the new account form submit
+_("#accountform").on('submit', function() {
+
+  // Fetch form data
+  var formdata = {};
+  _(this).find('input,select,textarea').each(function(el) {
+    formdata[el.name||el.id] = _(el).value();
+  });
+
+  // Save button states
+  var _btn = _(this).find('button');
+  var orgs = _btn.map(function(btn) {
+    return { el: btn, dis: btn.disabled, html: btn.innerHTML };
+  });
+
+  // Disable all buttons
+  _btn.each(function(btn) {
+    btn.disabled  = true;
+    btn.innerHTML = 'Generating key pair...';
+  });
+
+  // Allow button redraw
+  setTimeout(function() {
+
+    // Generate full KP
+    var ec  = new EC('p256'),
+        pri = generateSecret(formdata.username,formdata.password).toString('hex'),
+        kp  = ec.keyFromPrivate(pri);
+
+    // Change button text
+    orgs.forEach(function(record) {
+      record.el.innerHTML = 'Creating user...';
+    });
+
+    // Allow button redraw
+    setTimeout(function() {
+
+      // Create post data
+      var postdata = {
+        token    : data.token||'',
+        username : formdata.username,
+        pubkey   : kp.getPublic('hex')
+      };
+
+      // Submit what we just did
+      _.ajax({
+        method : 'POST',
+        uri    : "/api/v1/accounts",
+        data   : postdata
+      }, function(response) {
+        console.log(response);
+
+        // Revert all buttons
+        orgs.forEach(function(record) {
+          record.el.disabled  = record.dis;
+          record.el.innerHTML = record.html;
+        });
+      });
+    },10);
+  }, 10);
+});

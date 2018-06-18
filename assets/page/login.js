@@ -35,7 +35,7 @@ _('#loginform').each(function(el) {
     // Disable all buttons
     _btn.each(function(btn) {
       btn.disabled  = true;
-      btn.innerHTML = 'Calculating...';
+      btn.innerHTML = 'Generating key pair...';
     });
 
     // Timeout = allow browser to render
