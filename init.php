@@ -15,9 +15,11 @@ unset($_SERVER['argc']);
 // Keep it simple
 $statusCodes = array(
     200 => 'OK',
+    302 => 'Found',
     400 => 'Bad Request',
     403 => 'Permission denied',
     404 => 'Not Found',
+    422 => 'Unprocessable Entity',
     500 => 'Internal Server Error',
     501 => 'Not implemented',
 );
@@ -41,9 +43,10 @@ ob_start(function( $buffer ) {
 });
 
 // Make sure we support this
-if(!in_array($_SERVER['REQUEST_METHOD'],array('GET','DELETE'))) {
-    $status = 501;
-    die('The requested method has not (yet) been implemented'.PHP_EOL);
+if(!in_array($_SERVER['REQUEST_METHOD'],array('GET','POST','DELETE'))) {
+    $_REQUEST['status'] = 501;
+    header('Content-Type: application/json');
+    die('{"error":501,"description":"The requested method has not (yet) been implemented"}');
 }
 
 // Some security

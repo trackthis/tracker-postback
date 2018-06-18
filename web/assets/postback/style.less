@@ -57,7 +57,7 @@ textarea:focus, input:focus, button:focus {
   padding       : 0.5rem;
   margin        : 1rem;
 
-  > label {
+  > label:not(.switch-light) {
     position         : absolute;
     top              : -1em;
     left             : 0.5em;
@@ -69,6 +69,10 @@ textarea:focus, input:focus, button:focus {
     border    : none;
     font-size : 0.8em;
     min-width : 15em;
+    z-index   : 1;
+  }
+  > .switch-light {
+    z-index : 1;
   }
 }
 
@@ -98,7 +102,6 @@ button, .button, .btn {
     border-color : @color-disabled;
     color        : @color-disabled;
   }
-
   + button, + .button, + .btn {
     margin-top: 1em;
   }
@@ -111,6 +114,11 @@ header {
 }
 
 /* content */
+.clear {
+  display : table;
+  content : "";
+  clear   : both;
+}
 .content {
   padding : 1rem;
   > * + p, p + *,
@@ -128,9 +136,7 @@ header {
     margin-left: 0.25rem;
   }
   &:after {
-    display: table;
-    content : "";
-    clear: both;
+    .clear;
   }
 }
 hr {

@@ -1,5 +1,5 @@
 var rv = module.exports = {
-  data : { api: {}, action: {} }, lang : {}
+  data : { api: {}, action: {}, form: {} }, lang : {}
 };
 
 var rivets                = require('rivets');

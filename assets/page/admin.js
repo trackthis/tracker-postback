@@ -66,6 +66,7 @@ function accountEdit( event, context ) {
   console.log(this, args);
 }
 
+rv.data.form.account = { isAdmin: false };
 rv.data.api.accounts = [];
 _.ajax({ 'uri': '/api/v1/accounts', data: data }, function(response) {
   if(response.status !== 200) return;
@@ -133,9 +134,13 @@ _("#accountform").on('submit', function() {
         uri    : "/api/v1/accounts",
         data   : postdata
       }, function(response) {
-        console.log(response);
+        if (response.status!==200) {
+          console.log('TODO: error handling');
+          return;
+        }
+        window.location.href = '/admin/' + formdata.username + '?' + q.encode(data);
 
-        // Revert all buttons
+        // Revert all buttons (just in case)
         orgs.forEach(function(record) {
           record.el.disabled  = record.dis;
           record.el.innerHTML = record.html;
