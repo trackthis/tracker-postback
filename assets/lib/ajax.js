@@ -1,3 +1,5 @@
+var query = require('./query');
+
 module.exports = (function () {
   var factories = [
     /** global: XMLHttpRequest */
@@ -14,9 +16,20 @@ module.exports = (function () {
     }, false);
   }
 
-  return function( uri, cb ) {
+  return function( uri, data, cb ) {
     var req = httpObject();
     if(!req) { return; }
+    if ( 'function' === typeof data ) {
+      cb   = data;
+      data = {};
+    }
+    if ( 'function' !== typeof cb ) {
+      throw new Error("Callback must be a function");
+    }
+    if (Object.keys(data).length) {
+      uri += (uri.indexOf('?')>=0) ? '&' : '?';
+      uri += query.encode(data);
+    }
     req.open('GET',uri,true);
     req.onreadystatechange = function() {
       if(req.readyState!==4) { return; }
