@@ -7,7 +7,7 @@ $router->respond(function () {
 
     // If the path starts with one of these, it returns a 403 in JSON instead of the login page
     $apiPaths = array(
-//        '/foo',
+        '/api',
     );
 
     // Api & not authenticated = 403
@@ -18,10 +18,7 @@ $router->respond(function () {
             if (substr($_SERVER['REQUEST_URI'], 0, strlen($apiPath)) === $apiPath) {
                 $GLOBALS['status'] = 403;
                 header('Content-Type: application/json');
-                die(json_encode(array(
-                    'error'       => 403,
-                    'description' => 'Permission denied',
-                )));
+                die('{"error":403,"description":"Permission denied"}');
             }
         }
 

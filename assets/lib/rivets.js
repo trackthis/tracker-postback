@@ -1,10 +1,10 @@
 var rv = module.exports = {
-  data : { api: {} }, lang : {}
+  data : { api: {}, action: {} }, lang : {}
 };
 
 var rivets                = require('rivets');
 rivets.templateDelimiters = ['[[', ']]'];
-rv.bindings               = rivets.bind(document.body, rv.data).bindings;
+rv.bindings               = [];
 rv.updateDom              = function (arg, resolve, reject) {
   rv.bindings.forEach(function (binding) {
     binding.sync();
@@ -13,3 +13,8 @@ rv.updateDom              = function (arg, resolve, reject) {
     resolve();
   }
 };
+
+// Bind once the current run of code is done
+setTimeout(function(){
+  rv.bindings = rivets.bind(document.body, rv.data).bindings;
+}, 0);

@@ -16,9 +16,18 @@
         <table >
             <tbody>
                 <tr rv-each-account="api.accounts">
-                    <td width="24px"><a href="#!"><i class="material-icons">delete</i></a></td>
-                    <td width="24px"><a href="#!"><i class="material-icons">edit</i></a></td>
-                    <td>Root</td>
+                    <td width="24px"><i class="material-icons" rv-on-click="account.delete">delete</i>
+                        <dialog>
+                            <h2>Delete "[[ account.username ]]"</h2>
+                            <p>Are you sure you want to delete this account?</p>
+                            <div>
+                                <button class="border close">Cancel</button>
+                                <button class="border close">Yes, I'm sure</button>
+                            </div>
+                        </dialog>
+                    </td>
+                    <td width="24px"><i class="material-icons" rv-on-click="account.edit">edit</i></td>
+                    <td>[[ account.username ]]</td>
                 </tr>
             </tbody>
         </table>

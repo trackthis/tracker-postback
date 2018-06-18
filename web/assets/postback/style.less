@@ -71,26 +71,31 @@ textarea:focus, input:focus, button:focus {
   position : relative;
   padding  : 0;
   margin   : 1rem;
-
   > button {
-    .border;
-    background    : @color-back;
-    cursor        : pointer;
-    display       : block;
-    font-size     : 0.8em;
-    padding       : 0.5rem;
-    width         : 100%;
+    font-size : 0.8em;
+  }
+}
+button, .button {
+  .border;
+  background : @color-back;
+  cursor     : pointer;
+  display    : block;
+  padding    : 0.5rem;
+  width      : 100%;
 
-    &:focus, &:hover {
-      background : @color-focus;
-    }
-    &:active {
-      background : @color-active;
-    }
-    &:disabled {
-      border-color : @color-disabled;
-      color        : @color-disabled;
-    }
+  &:focus, &:hover {
+    background : @color-focus;
+  }
+  &:active {
+    background : @color-active;
+  }
+  &:disabled {
+    border-color : @color-disabled;
+    color        : @color-disabled;
+  }
+
+  + button, + .button {
+    margin-top: 1em;
   }
 }
 
@@ -118,4 +123,36 @@ table {
   tr + tr {
     border-top : 1px solid @color-front;
   }
+}
+
+/* Dialogs */
+dialog {
+  .border;
+  .cover { display: none; }
+  &[open] {
+    .close { cursor: pointer; }
+    i.material-icons.close {
+      .border;
+      background : @color-back;
+      cursor     : pointer;
+      position   : absolute;
+      right      : -0.5em;
+      top        : -0.5em;
+    }
+    + .cover {
+      background : fade(@color-front,30%);
+      display    : block;
+      height     : 100%;
+      left       : 0;
+      position   : fixed;
+      top        : 0;
+      width      : 100%;
+      z-index    : -1;
+    }
+  }
+}
+
+/* Rivets stuff */
+[rv-on-click] {
+  cursor: pointer;
 }

@@ -1,4 +1,4 @@
-var $         = require('../lib/fw'),
+var _         = require('../lib/fw'),
     base64url = require('base64url'),
     crypto    = require('crypto'),
     EC        = require('elliptic').ec,
@@ -19,21 +19,21 @@ function generateSecret(username, password) {
   return crypto.pbkdf2Sync(password,username,result+1e3,64,'sha256');
 }
 
-$('#loginform').each(function(el) {
-  $(el).on('submit', function() {
+_('#loginform').each(function(el) {
+  _(el).on('submit', function() {
 
     // Fetch data & buttons
-    var name = $('#username').value(),
-        pass = $('#password').value(),
-        $btn = $(el).find('button');
+    var name = _('#username').value(),
+        pass = _('#password').value(),
+        _btn = _(el).find('button');
 
     // Save button states
-    var orgs = $btn.map(function(btn) {
+    var orgs = _btn.map(function(btn) {
       return { el: btn, dis: btn.disabled, html: btn.innerHTML };
     });
 
     // Disable all buttons
-    $btn.each(function(btn) {
+    _btn.each(function(btn) {
       btn.disabled  = true;
       btn.innerHTML = 'Calculating...';
     });
