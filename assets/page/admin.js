@@ -9,14 +9,14 @@ function fancyDialog(target) {
   if(Array.isArray(target)) return target.map(fancyDialog);
   if(target.getAttribute('upgraded')) return true;
   target.setAttribute('upgraded',1);
-  var cover = document.createElement('DIV'),
-      close = document.createElement('I');
+  var cover = document.createElement('DIV');
+  // var close = document.createElement('I');
   cover.className = 'cover';
-  close.className = 'close material-icons';
-  close.innerHTML = 'close';
+  // close.className = 'close material-icons';
+  // close.innerHTML = 'close';
   target.parentNode.insertBefore(cover,target);
   target.parentNode.insertBefore(target,cover);
-  target.appendChild(close);
+  // target.appendChild(close);
   _(target).find('.close').on('click', function() {
     target.close();
   });
@@ -24,12 +24,22 @@ function fancyDialog(target) {
 }
 
 function accountDelete( event, context ) {
-  var args = [].slice.call(arguments),
-      el   = this;
-  _(el.parentNode).find('dialog').each(function(dialog) {
-    fancyDialog(dialog);
-    dialog.show();
-  });
+  var el = this;
+  if (this.tagName!=='BUTTON') {
+    _(el.parentNode).find('dialog').each(function(dialog) {
+      fancyDialog(dialog);
+      dialog.show();
+    });
+    return;
+  }
+
+  _.ajax({
+    method : 'DELETE',
+    uri    : "/api/v1/account/" + context.account.username,
+    data   : data
+  }, function(response) {
+    console.log(response);
+  })
 }
 
 function accountEdit( event, context ) {
@@ -50,4 +60,3 @@ _.ajax({ 'uri': '/api/v1/accounts', data: data }, function(response) {
 
 
 console.log(data);
-console.log(_('dialog'));

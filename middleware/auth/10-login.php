@@ -16,7 +16,7 @@ $router->respond(function () {
         // Handle API paths
         foreach ($apiPaths as $apiPath) {
             if (substr($_SERVER['REQUEST_URI'], 0, strlen($apiPath)) === $apiPath) {
-                $GLOBALS['status'] = 403;
+                $_REQUEST['status'] = 403;
                 header('Content-Type: application/json');
                 die('{"error":403,"description":"Permission denied"}');
             }

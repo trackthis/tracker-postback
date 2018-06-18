@@ -16,6 +16,7 @@ unset($_SERVER['argc']);
 $statusCodes = array(
     200 => 'OK',
     400 => 'Bad Request',
+    403 => 'Permission denied',
     404 => 'Not Found',
     500 => 'Internal Server Error',
     501 => 'Not implemented',
@@ -40,7 +41,7 @@ ob_start(function( $buffer ) {
 });
 
 // Make sure we support this
-if(!in_array($_SERVER['REQUEST_METHOD'],array('GET'))) {
+if(!in_array($_SERVER['REQUEST_METHOD'],array('GET','DELETE'))) {
     $status = 501;
     die('The requested method has not (yet) been implemented'.PHP_EOL);
 }
@@ -62,7 +63,9 @@ while(($line=str_replace("\r",'',str_replace("\r\n", "\n", fgets($f))))!="\n") {
     $_SERVER['HTTP_'.strtoupper(str_replace('-','_',$key))] = $value;
 }
 
-// Read query string
+// TODO: read body
+
+// Parse query string
 $params = explode('?', $_SERVER['REQUEST_URI'], 2);
 $path   = trim($docroot.DS.trim(array_shift($params),'/'));
 $ext    = @array_pop(explode('.',$path));
