@@ -84,6 +84,8 @@ main.centered > * {
 
 /* Form stuff */
 textarea, input, button {
+  background  : @color-back;
+  color       : @color-front;
   font-size   : inherit;
   line-height : 1.5;
   &:focus {
@@ -101,7 +103,7 @@ textarea, input, button {
     top              : -0.7em;
     left             : 0.5em;
     padding          : 0 0.3em;
-    background-color : white;
+    background-color : @color-back;
   }
 
   > input {
@@ -209,6 +211,8 @@ table {
 dialog {
   .border;
   .cover { display : none; }
+  background : @color-back;
+  color      : @color-front;
   &[open] {
     z-index : 1;
     .close { cursor : pointer; }
