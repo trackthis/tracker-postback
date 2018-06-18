@@ -26,6 +26,6 @@ $router->respond(function () {
         }
 
         header('Content-Type: text/html');
-        die($_SERVICE['template']->render('login',[]));
+        die($_SERVICE['template']('login'));
     }
 });

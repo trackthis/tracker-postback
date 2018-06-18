@@ -7,7 +7,7 @@ $router->respond('/admin',function () {
 
     if(!$isAdmin) {
         $_REQUEST['status'] = 403;
-        die($_SERVICE['template']->render('denied',[]));
+        die($_SERVICE['template']('denied'));
     }
 
     echo 'Yo, ADMIN';
