@@ -33,6 +33,18 @@ var $ = (function() {
     unshift : Array.prototype.unshift,
     reduce  : Array.prototype.reduce,
     map     : Array.prototype.map,
+    text    : function( newval ) {
+      return this.reduce(function(acc,el) {
+        if ('undefined'!==typeof newval) el.innerText = newval;
+        return el.innerText || acc;
+      }, '');
+    },
+    html    : function( newval ) {
+      return this.reduce(function(acc,el) {
+        if ('undefined'!==typeof newval) el.innerHTML = newval;
+        return el.innerHTML || acc;
+      }, '');
+    },
     value   : function( newval ) {
       return this.reduce(function(acc,el) {
         if ('undefined'!==typeof newval) el.value = newval;
@@ -43,7 +55,7 @@ var $ = (function() {
       this.each(function(el) {
         if(el.addEventListener) {
           el.addEventListener(ev,cb,false);
-        } if ( el.attachEvent ) {
+        } else if ( el.attachEvent ) {
           el.attachEvent('on'+ev,function() {
             return cb.call(el,window.event);
           });
