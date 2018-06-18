@@ -76,9 +76,9 @@ main.centered > * {
   &, li { list-style-type : none; }
   li {
     padding: 0.5rem;
-    + li {
-      border-top :  1px solid @color-front;
-    }
+  }
+  * + li { // Don't limit to list predecessors (like dialogs)
+    border-top :  1px solid @color-front;
   }
 }
 
@@ -199,6 +199,12 @@ table {
   color           : inherit;
   cursor          : pointer;
   text-decoration : none;
+  &:hover, &:focus {
+    background-color : @color-focus;
+  }
+  &:active {
+    background-color : @color-active;
+  }
 }
 dialog {
   .border;
