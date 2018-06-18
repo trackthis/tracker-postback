@@ -39,9 +39,13 @@
 
         <ul class="list-bordered">
             <li class="valign">
-                <a class="material-icons">delete</a>
-                <a class="material-icons">edit</a>
-                <span>dinges</span>
+                <a class="material-icons show-modal" href="#!">add</a>
+                <dialog>
+                    <i class="material-icons close">close</i>
+                    <h2>New API token</h2>
+                    <p>TODO</p>
+                </dialog>
+                <span>New API token</span>
             </li>
             {{#each tokens}}
                 <li class="valign">
