@@ -25,6 +25,7 @@ int main( int argc, char **argv ) {
   }
 
   int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+  int on     = 1;
   if(sockfd<0) error("socket");
   struct sockaddr_in saddr, caddr;
   bzero((char *) &saddr, sizeof(saddr));
@@ -32,6 +33,7 @@ int main( int argc, char **argv ) {
   saddr.sin_addr.s_addr = INADDR_ANY;
   saddr.sin_port        = htons(port);
 
+  setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
   if(bind(sockfd,(struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
     error("bind");
   }
