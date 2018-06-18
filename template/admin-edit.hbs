@@ -38,15 +38,10 @@
         <h3>API Tokens</h3>
 
         <ul class="list-bordered">
-            <li class="valign show-modal">
+            <li class="valign" href="/tokens/new?user={{account.username}}&{{__query}}">
                 <i class="material-icons">add</i>
                 <span>New API token</span>
             </li>
-            <dialog>
-                <i class="material-icons close">close</i>
-                <h2>New API token</h2>
-                <p>TODO</p>
-            </dialog>
             {{#each tokens}}
                 <li class="valign">
                     <a class="material-icons show-modal" href="#!">delete</a>
@@ -59,19 +54,6 @@
                             <button class="border">Yes, I'm sure</button>
                         </div>
                     </dialog>
-                    <a class="material-icons show-modal">edit</a>
-                    <dialog>
-                        <i class="material-icons close">close</i>
-                        <h2>Edit API token</h2>
-                        <pre>{{description}}</pre>
-                        <p>
-                            This is still a todo
-                        </p>
-                        <!--<div>-->
-                            <!--<button class="border close">Cancel</button>-->
-                            <!--<button class="border">Yes, I'm sure</button>-->
-                        <!--</div>-->
-                    </dialog>
                     <span>{{description}}</span>
                 </li>
             {{/each}}
@@ -80,3 +62,43 @@
 </main>
 
 {{>postcontent}}
+
+{{!--
+
+            <dialog>
+                <form id="createApiTokenForm" onsubmit="return false;">
+                    <h2>New API token</h2>
+
+                    <div class="form-input">
+                        <input type="text" id="token-description" required pattern="[ a-zA-Z0-9\-_]{3,}" title="Minimum of 3 characters (a-z, 0-9, -, _)" />
+                        <label for="token-description">Description</label>
+                    </div>
+
+                    <div class="form-input">
+                        <input type="text" id="token-type" required pattern="[a-zA-Z0-9\-_]+" title="Minimum of 1 character (a-z, 0-9, -, _)" />
+                        <label for="token-type">Type field</label>
+                    </div>
+
+                    <div class="form-input">
+                        <input type="text" id="token-affiliate" required pattern="[a-zA-Z0-9\-_]+" title="Minimum of 1 character (a-z, 0-9, -, _)" />
+                        <label for="token-affiliate">Affiliate field</label>
+                    </div>
+
+                    <div class="form-input">
+                        <input type="text" id="token-campaign" required pattern="[a-zA-Z0-9\-_]+" title="Minimum of 1 character (a-z, 0-9, -, _)" />
+                        <label for="token-campaign">Campaign field</label>
+                    </div>
+
+                    <div class="form-input">
+                        <input type="text" id="token-extra" required pattern="[a-zA-Z0-9\-_]+" title="Minimum of 1 character (a-z, 0-9, -, _)" />
+                        <label for="token-extra">Extra field</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button>Create</button>
+                    </div>
+
+                </form>
+                <i class="material-icons close">close</i>
+            </dialog>
+--}}

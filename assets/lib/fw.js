@@ -72,5 +72,35 @@ module.exports = (function() {
       return this;
     }
   };
+
+  f.fn.filter = function( callback ) {
+    var self = this,
+        out  = [];
+    Object.keys(self).forEach(function(key) {
+      if ( Object.keys(f.fn).indexOf(key) >= 0 ) return;
+      if ( callback.call(self[key], self[key]) ) out.push(self[key]);
+    });
+    return convert(out);
+  };
+
+  f.fn.style = function ( parameters ) {
+    var args = Array.prototype.slice.call(arguments),
+        obj  = this;
+
+    if ( ('object' !== typeof parameters) && args.length === 2 ) {
+      var opts = {};
+      opts[args[0]] = args[1];
+      return f.fn.style.call(this,opts);
+    }
+
+    obj.each(function(el) {
+      Object.keys(parameters).forEach(function(param) {
+        el.style[param] = parameters[param];
+      });
+    });
+
+    return obj;
+  };
+
   return f;
 })();
