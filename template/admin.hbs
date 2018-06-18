@@ -21,7 +21,7 @@
             <form onsubmit="return false;">
 
                 <div class="form-input">
-                    <input type="text" id="username" required pattern=".{3,}" title="Minimum of 3 characters" />
+                    <input type="text" id="username" required pattern="[ a-zA-Z0-9\-_]{3,}" title="Minimum of 3 characters (a-z, 0-9, -, _)" />
                     <label for="username">Username</label>
                 </div>
 
@@ -39,6 +39,8 @@
                     <button>Create</button>
                 </div>
             </form>
+
+            <i class="material-icons close">close</i>
         </dialog>
 
         <div class="border paragraph valign padded" rv-each-account="api.accounts">
