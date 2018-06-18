@@ -27,7 +27,7 @@ html {
   border-radius : 0.25rem;
 }
 .padded {
-  padding : 1rem;
+  padding : 0.5rem;
 }
 .loner {
   margin : 1rem;
@@ -80,7 +80,7 @@ textarea:focus, input:focus, button:focus {
     font-size : 0.8em;
   }
 }
-button, .button {
+button, .button, .btn {
   .border;
   background : @color-back;
   cursor     : pointer;
@@ -99,7 +99,7 @@ button, .button {
     color        : @color-disabled;
   }
 
-  + button, + .button {
+  + button, + .button, + .btn {
     margin-top: 1em;
   }
 }
@@ -149,9 +149,10 @@ table {
 /* Dialogs */
 dialog {
   .border;
-  .cover { display: none; }
+  .cover { display : none; }
   &[open] {
-    .close { cursor: pointer; }
+    z-index : 1;
+    .close { cursor : pointer; }
     i.material-icons.close {
       .border;
       background : @color-back;
@@ -161,14 +162,13 @@ dialog {
       top        : -0.5em;
     }
     + .cover {
-      background : fade(@color-front,30%);
+      background : fade(@color-front, 30%);
       display    : block;
       height     : 100%;
       left       : 0;
       position   : fixed;
       top        : 0;
       width      : 100%;
-      z-index    : -1;
     }
   }
 }

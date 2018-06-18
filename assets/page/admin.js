@@ -60,5 +60,8 @@ _.ajax({ 'uri': '/api/v1/accounts', data: data }, function(response) {
   }
 });
 
-
-console.log(data);
+rv.data.action.newAccountDialog = function( event, context ) {
+  var dialog = this.nextElementSibling;
+  fancyDialog(dialog);
+  dialog.show();
+};

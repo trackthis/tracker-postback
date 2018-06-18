@@ -13,7 +13,35 @@
         <h2>Users</h2>
         <p>Select a user to modify or create a new one</p>
 
-        <div class="border paragraph valign" rv-each-account="api.accounts">
+        <div class="border paragraph valign btn" rv-on-click="action.newAccountDialog">
+            <i class="material-icons">add</i>
+            <span>Create a new account</span>
+        </div>
+        <dialog>
+            <form onsubmit="return false;">
+
+                <div class="form-input">
+                    <input type="text" id="username" />
+                    <label for="username">Username</label>
+                </div>
+
+                <div class="form-input">
+                    <input type="password" id="password" />
+                    <label for="password">Password</label>
+                </div>
+
+                <div class="form-input">
+                    <input type="password" id="password-repeat" />
+                    <label for="password-repeat">Repeat password</label>
+                </div>
+
+                <div class="form-actions">
+                    <button>Create</button>
+                </div>
+            </form>
+        </dialog>
+
+        <div class="border paragraph valign padded" rv-each-account="api.accounts">
             <i class="material-icons" rv-on-click="account.delete">delete</i>
             <dialog>
                 <h2>Delete "[[ account.username ]]"</h2>
