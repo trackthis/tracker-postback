@@ -31,8 +31,8 @@ function ensureWriteStream(file, callback) {
 
 // Define our own variables
 var approot = path.dirname(__dirname),
-    srcDir  = path.join(approot, 'assets', 'js'),
-    dstDir  = path.join(approot, 'web', 'assets', 'js');
+    srcDir  = path.join(approot, 'assets', 'page'),
+    dstDir  = path.join(approot, 'web', 'assets', 'page');
 
 // The transform function
 function transform( file, argv ) {
