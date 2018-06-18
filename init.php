@@ -52,6 +52,30 @@ if (strpos($_SERVER['REQUEST_URI'], '..')!==false) {
     die('You\'ve send something we don\'t understand or allow'.PHP_EOL);
 }
 
+// Helper functions
+if(!function_exists('set_deep')) {
+    function set_deep($path, &$dataHolder = array(), $value = null) {
+        $keys = explode('.', $path);
+        while (count($keys)) {
+            $dataHolder = &$dataHolder[array_shift($keys)];
+        }
+        $dataHolder = $value;
+    }
+}
+if(!function_exists('decodeQuery')) {
+    function decodeQuery($str) {
+        $out       = array();
+        $variables = explode('&', $str);
+        foreach ($variables as $variable) {
+            $components = explode('=', $variable);
+            $key        = str_replace(array('[', ']'), array('.', ''), urldecode(array_shift($components)));
+            $value      = urldecode(array_shift($components));
+            set_deep($key, $out, $value);
+        }
+        return $out;
+    }
+}
+
 // Read headers
 while(($line=str_replace("\r",'',str_replace("\r\n", "\n", fgets($f))))!="\n") {
     while(substr(rtrim($line), -1)=="\\") {
@@ -63,24 +87,26 @@ while(($line=str_replace("\r",'',str_replace("\r\n", "\n", fgets($f))))!="\n") {
     $_SERVER['HTTP_'.strtoupper(str_replace('-','_',$key))] = $value;
 }
 
-// TODO: read body
+if (isset($_SERVER['HTTP_CONTENT_LENGTH'])) {
+    $_REQUEST['body'] = fread($f,intval($_SERVER['HTTP_CONTENT_LENGTH']));
+
+    if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
+        switch($_SERVER['HTTP_CONTENT_TYPE']) {
+            case 'application/json': $_POST = json_decode($_REQUEST['body'], true); break;
+            default:
+                $_REQUEST['status'] = 400;
+                die('{"error":400,"description":"Invalid request - unsupported body content type"}');
+        }
+    }
+}
 
 // Parse query string
 $params = explode('?', $_SERVER['REQUEST_URI'], 2);
 $path   = trim($docroot.DS.trim(array_shift($params),'/'));
 $ext    = @array_pop(explode('.',$path));
-if(!function_exists('set_deep')) {
-    function set_deep($path, &$dataHolder = array(), $value = null) {
-        $keys = explode('.', $path);
-        while (count($keys)) {
-            $dataHolder = &$dataHolder[array_shift($keys)];
-        }
-        $dataHolder = $value;
-    }
-}
 if(count($params)) {
     $params = array_shift($params);
-    $_GET   = array();
+    $_GET   = decodeQuery($params);
     $variables = explode('&', $params);
     foreach ($variables as $variable) {
         $components = explode('=', $variable);
