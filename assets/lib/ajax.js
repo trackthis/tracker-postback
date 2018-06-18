@@ -34,7 +34,7 @@ module.exports = (function () {
 
     if ( (options.method === "GET") && options.data ) {
       options.uri += (options.uri.indexOf('?')>=0) ? '&' : '?';
-      options.uri += query.encode(data);
+      options.uri += query.encode(options.data);
       options.data = undefined;
     }
 

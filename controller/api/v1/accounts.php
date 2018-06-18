@@ -10,5 +10,12 @@ $router->respond('/api/v1/accounts',function () {
         die($_SERVICE['template']('denied'));
     }
 
-    echo 'Yo, ADMIN';
+    /** @var \PicoDb\Database $odm */
+    $odm      = $_SERVICE['odm'];
+    $accounts = $odm->table('account')->findAll();
+    header("Content-Type: application/json");
+    die(json_encode(array_map(function($account) {
+        $account['settings'] = json_decode($account['settings'],true);
+        return $account;
+    }, $accounts)));
 });
