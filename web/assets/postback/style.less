@@ -1,17 +1,19 @@
-@import url('https://fonts.googleapis.com/css?family=Asap:400,700');
+@import url('https://fonts.googleapis.com/css?family=Asap:400,700|Ubuntu+Mono:400,700');
 
 @color-back     : #FFF;
 @color-front    : #000;
 @color-disabled : average( @color-front   , @color-back );
 @color-active   : average( @color-disabled, @color-back );
 @color-focus    : average( @color-active  , @color-back );
+@sans-serif     : "Asap", sans-serif;
+@monospace      : "Ubuntu Mono", monospace;
 
 /* Basics */
 * {
   -webkit-box-sizing : border-box;
   -moz-box-sizing    : border-box;
   box-sizing         : border-box;
-  font-family        : "Asap", sans-serif;
+  font-family        : @sans-serif
 }
 html, body {
   margin  : 0;
@@ -21,6 +23,11 @@ html {
   background : @color-back;
   color      : @color-front;
   font-size  : calc(0.85rem + 0.2vw);
+}
+pre {
+  background-color : @color-focus;
+  font-family      : @monospace;
+  padding          : 0.5em;
 }
 .border {
   border        : 2px solid @color-front;
@@ -45,8 +52,9 @@ html {
   text-align : center;
 }
 main.centered > * {
-  display    : inline-block;
-  text-align : initial;
+  display        : inline-block;
+  text-align     : initial;
+  vertical-align : top;
 }
 
 /* Icon fix */
@@ -54,9 +62,29 @@ main.centered > * {
   font-size: 1.5em !important;
 }
 
+/* Lists */
+.list-bordered {
+  border                : 1px solid @color-front;
+  -webkit-border-radius : 0.25rem;
+  -moz-border-radius    : 0.25rem;
+  border-radius         : 0.25rem;
+  padding : 0;
+  &, li { list-style-type : none; }
+  li {
+    padding: 0.5rem;
+    + li {
+      border-top :  1px solid @color-front;
+    }
+  }
+}
+
 /* Form stuff */
-textarea:focus, input:focus, button:focus {
-  outline : none;
+textarea, input, button {
+  font-size   : inherit;
+  line-height : 1.5;
+  &:focus {
+    outline: none;
+  }
 }
 .form-input {
   .border;
@@ -135,11 +163,14 @@ header {
   }
 }
 .valign {
+  white-space : nowrap;
   > *:not(dialog):not(.cover) {
     &:not(.material-icons) {
       line-height : 1.5em;
     }
     float: left;
+  }
+  > * + :not(dialog):not(.cover) {
     margin-left : 0.25rem;
   }
   &:after {
@@ -160,6 +191,11 @@ table {
 }
 
 /* Dialogs */
+.show-modal {
+  color           : inherit;
+  cursor          : pointer;
+  text-decoration : none;
+}
 dialog {
   .border;
   .cover { display : none; }

@@ -2,8 +2,64 @@
 {{>header this edit=account.username}}
 
 <main class="centered">
+
+    <form class="content" onsubmit="return false;">
+        <h3>Username</h3>
+
+        <div class="form-input disabled">
+            <input type="text" id="username" disabled value="{{account.username}}" />
+            <label for="username">Username</label>
+        </div>
+
+        <div class="form-actions disabled">
+            <button disabled>Read only</button>
+        </div>
+    </form>
+
+    <form class="content" onsubmit="return false;" id="updatePassword">
+        <h3>Password update</h3>
+
+        <div class="form-input">
+            <input type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" />
+            <label for="password">Password</label>
+        </div>
+
+        <div class="form-input">
+            <input type="password" id="password-repeat" pattern=".{8,}" required title="Must match the above password" />
+            <label for="password-repeat">Repeat password</label>
+        </div>
+
+        <div class="form-actions">
+            <button>Save</button>
+        </div>
+    </form>
+
     <div class="content">
-        Let's modify {{account.username}}, shall we?
+        <h3>API Tokens</h3>
+
+        <ul class="list-bordered">
+            <li class="valign">
+                <a class="material-icons">delete</a>
+                <a class="material-icons">edit</a>
+                <span>dinges</span>
+            </li>
+            {{#each tokens}}
+                <li class="valign">
+                    <a class="material-icons show-modal" href="#!">delete</a>
+                    <dialog>
+                        <h2>Delete API token</h2>
+                        <p>Are you sure you want to delete the API token with the following description?</p>
+                        <pre>{{description}}</pre>
+                        <div>
+                            <button class="border close">Cancel</button>
+                            <button class="border">Yes, I'm sure</button>
+                        </div>
+                    </dialog>
+                    <a class="material-icons">edit</a>
+                    <span>{{description}}</span>
+                </li>
+            {{/each}}
+        </ul>
     </div>
 </main>
 

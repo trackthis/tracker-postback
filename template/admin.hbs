@@ -67,11 +67,4 @@
     </div>
 </main>
 
-<script type="application/javascript">
-    function inputmatch(el,id) {
-      function esc(str) { return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"); }
-      document.getElementById(id).pattern = esc(el.value);
-    }
-</script>
-
 {{>postcontent}}
