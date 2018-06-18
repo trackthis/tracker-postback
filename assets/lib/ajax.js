@@ -16,21 +16,29 @@ module.exports = (function () {
     }, false);
   }
 
-  return function( uri, data, cb ) {
+  return function( options, cb ) {
+    options = options || {};
     var req = httpObject();
     if(!req) { return; }
-    if ( 'function' === typeof data ) {
-      cb   = data;
-      data = {};
+    if ( 'function' === typeof options ) {
+      cb      = options;
+      options = {};
     }
     if ( 'function' !== typeof cb ) {
       throw new Error("Callback must be a function");
     }
-    if (Object.keys(data).length) {
-      uri += (uri.indexOf('?')>=0) ? '&' : '?';
-      uri += query.encode(data);
+    if( 'string' !== typeof options.uri) {
+      throw new Error("Uri not given or not a string");
     }
-    req.open('GET',uri,true);
+    options.method = (options.method||'GET').toUpperCase();
+
+    if ( (options.method === "GET") && options.data ) {
+      options.uri += (options.uri.indexOf('?')>=0) ? '&' : '?';
+      options.uri += query.encode(data);
+      options.data = undefined;
+    }
+
+    req.open(options.method,options.uri,true);
     req.onreadystatechange = function() {
       if(req.readyState!==4) { return; }
       var response = {
@@ -45,6 +53,6 @@ module.exports = (function () {
       }
       cb(response);
     };
-    req.send();
+    req.send(options.data);
   };
 })();
