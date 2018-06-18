@@ -53,6 +53,11 @@ module.exports = (function () {
       }
       cb(response);
     };
+    // JSON encode the data if present
+    if ( options.data ) {
+      req.setRequestHeader('Content-Type','application/javascript');
+      options.data = JSON.stringify(options.data);
+    }
     req.send(options.data);
   };
 })();
