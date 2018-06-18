@@ -48,7 +48,8 @@ foreach (array_merge(
 // Initialize controllers
 foreach (array_merge(
              glob(APPROOT . DS . 'controller' . DS . '*.php'),
-             glob(APPROOT . DS . 'controller' . DS . '**' . DS . '*.php')
+             glob(APPROOT . DS . 'controller' . DS . '**' . DS . '*.php'),
+             glob(APPROOT . DS . 'controller' . DS . '**' . DS . '**' . DS . '*.php')
          ) as $filename
 ) {
     require_once($filename);
