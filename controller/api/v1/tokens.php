@@ -28,9 +28,9 @@ $router->respond('GET', '/api/v1/tokens', function () {
 
     die(json_encode(array_map(function ($token) use ($settings) {
         $result = array(
-            'id'          => $token['id'],
+            'id'          => intval($token['id']),
             'description' => $token['description'],
-            'expires'     => $token['expires'],
+            'expires'     => intval($token['expires']),
         );
         if ( $settings['token'] ) {
             $result['token'] = $token['token'];
