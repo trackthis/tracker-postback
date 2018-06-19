@@ -42,22 +42,21 @@
                 <i class="material-icons">add</i>
                 <span>New API token</span>
             </li>
-            {{#for tokens as token}}
-                <li class="valign">
+
+                <li class="valign" rv-each-token="api.tokens">
                     <a class="material-icons show-modal" href="#!">delete</a>
                     <dialog>
                         <h2>Delete API token</h2>
                         <p>Are you sure you want to delete the API token with the following description?</p>
-                        <pre>{{token.description}}</pre>
+                        <pre>[[token.description]]</pre>
                         <div>
                             <button class="border close">Cancel</button>
-                            <button class="border">Yes, I'm sure</button>
+                            <button class="border" rv-on-click="token.delete">Yes, I'm sure</button>
                         </div>
                     </dialog>
-                    <a class="material-icons show-modal" href="/tokens/{{token.id}}?token={{__token}}">edit</a>
-                    <span>{{token.description}}</span>
+                    <a class="material-icons show-modal" {{!--href="/tokens/[[token.id]]?token={{__token}}"--}}>edit</a>
+                    <span>[[token.description]]</span>
                 </li>
-            {{/for}}
         </ul>
     </div>
 </main>

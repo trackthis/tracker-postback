@@ -46,13 +46,13 @@ $router->respond('GET', '/admin/[:username]', function( $request ) {
         )));
     }
 
-    // Fetch the account's tokens
-    $tokens = $odm->table('token')->eq('username', $username)->findAll();
+//    // Fetch the account's tokens
+//    $tokens = $odm->table('token')->eq('username', $username)->findAll();
 
     // Reply with the edit page
     $account['settings'] = json_decode($account['settings'], true);
     die($_SERVICE['template']('admin-edit', array(
         "account" => $account,
-        "tokens"  => $tokens
+//        "tokens"  => $tokens
     )));
 });
