@@ -8,18 +8,18 @@
 
         {{#if __settings.admin}}
             <div class="form-input">
-                <input type="text" id="username" value="{{GET.account}}" />
+                <input type="text" id="username" {{#if edit}}value="{{token.username}}"{{/if}}{{#if new}}value="{{GET.account}}"{{/if}} />
                 <label for="username">Username</label>
             </div>
         {{/if}}
 
         <div class="form-input">
-            <input type="text" id="description" />
+            <input type="text" id="description" {{#if edit}}value="{{token.description}}"{{/if}} />
             <label for="username">Description</label>
         </div>
 
         <div class="form-input">
-            <input type="date" id="description" />
+            <input type="datetime-local" id="tokenExpires"/>
             <label for="username">Expires*</label>
         </div>
 
@@ -39,7 +39,7 @@
         <div class="content" onsubmit="return false;">
             <h3>Mapping</h3>
 
-            <button class="valign">
+            <button class="valign" rv-on-click="form.addrule">
                 <i class="material-icons">add</i>
                 <span>New rule</span>
             </button>
@@ -47,23 +47,23 @@
             <form class="form-horizontal" rv-each-rule="form.rules">
 
                 <div class="form-input" >
-                    <input type="text" rv-id="%rule% | prepend 'remote[' | append ']'"/>
+                    <input type="text" rv-id="%rule% | prepend 'remote[' | append ']'" rv-value="rule.remote"/>
                     <label rv-for="%rule% | prepend 'remote[' | append ']'">Remote</label>
                 </div>
 
                 <div class="form-input" >
-                    <input type="text" rv-id="%rule% | prepend 'tracker[' | append ']'"/>
+                    <input type="text" rv-id="%rule% | prepend 'tracker[' | append ']'" rv-value="rule.tracker"/>
                     <label rv-for="%rule% | prepend 'tracker[' | append ']'">Tracker</label>
                 </div>
 
                 <div class="form-input" >
-                    <input type="text" rv-id="%rule% | prepend 'translate[' | append ']'"/>
+                    <input type="text" rv-id="%rule% | prepend 'translate[' | append ']'" rv-value="rule.translate"/>
                     <label rv-for="%rule% | prepend 'translate[' | append ']'">Translate</label>
                 </div>
 
                 <div class="form-actions">
-                    <button class="valign"><i class="material-icons">delete</i><span>Delete</span></button>
-                    <button class="valign"><i class="material-icons">save</i><span>Save</span></button>
+                    <button class="valign" rv-on-click="form.delrule"><i class="material-icons">delete</i><span>Delete</span></button>
+                    <button class="valign" rv-on-click="form.saverule"><i class="material-icons">save</i><span>Save</span></button>
                 </div>
 
             </form>
@@ -72,5 +72,6 @@
     </div>
 {{/if}}
 
-<script>var tokenid={{token}}</script>
+<script>var token={{token}}</script>
+{{#if edit}}{{#if token.expires}}<script>tokenExpires.valueAsNumber = Math.floor({{token.expires}}/60)*60000;</script>{{/if}}{{/if}}
 {{>postcontent}}

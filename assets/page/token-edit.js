@@ -7,10 +7,28 @@ var q      = require('../lib/query'),
 
 // Prepare rv data
 rv.data.form.account = { isAdmin: false };
-rv.data.form.tokenid = tokenid;
+rv.data.form.tokenid = token.id;
 rv.data.form.rules   = [];
 
-console.log(tokenid);
+// RV actions
+rv.data.form.addrule = function( event, context ) {
+  context.form.rules.push({
+    'id'       : '', // TODO
+    'token'    : context.form.tokenid,
+    'account'  : '', // TODO
+    'remote'   : '',
+    'tracker'  : '',
+    'translate': ''
+  });
+};
+rv.data.form.delrule = function( event, context ) {
+  var index = context['%rule%'];
+  context.form.rules.splice(index,1);
+  // TODO: del through API
+};
+rv.data.form.saverule = function( event, context ) {
+  console.log(context.rule);
+};
 
 // // Fetch API tokens
 // (function() {

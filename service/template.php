@@ -19,6 +19,9 @@ $_SERVICE['template'] = function ($c) {
                     'json' => function( \Handlebars\Template $template, \Handlebars\Context $context, \Handlebars\Arguments $arguments, $block ) {
                         return json_encode($context->get($arguments->getPositionalArguments()[0]));
                     },
+                    'date' => function( \Handlebars\Template $template, \Handlebars\Context $context, \Handlebars\Arguments $arguments, $block ) {
+                        return date('c', $context->get($arguments->getPositionalArguments()[0]));
+                    },
                     'for' => function( \Handlebars\Template $template, \Handlebars\Context $context, \Handlebars\Arguments $arguments, $block ) {
                         $ctx  = $context->get('this'); $out  = '';
                         $list = $context->get($arguments->getPositionalArguments()[0]);
