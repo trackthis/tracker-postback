@@ -38,25 +38,26 @@
         <h3>API Tokens</h3>
 
         <ul class="list-bordered">
-            <li class="valign" href="/tokens/new?user={{account.username}}&{{__query}}">
+            <li class="valign" href="/tokens/new?user={{account.username}}&token={{__token}}">
                 <i class="material-icons">add</i>
                 <span>New API token</span>
             </li>
-            {{#each tokens}}
+            {{#for tokens as token}}
                 <li class="valign">
                     <a class="material-icons show-modal" href="#!">delete</a>
                     <dialog>
                         <h2>Delete API token</h2>
                         <p>Are you sure you want to delete the API token with the following description?</p>
-                        <pre>{{description}}</pre>
+                        <pre>{{token.description}}</pre>
                         <div>
                             <button class="border close">Cancel</button>
                             <button class="border">Yes, I'm sure</button>
                         </div>
                     </dialog>
-                    <span>{{description}}</span>
+                    <a class="material-icons show-modal" href="/tokens/{{token.id}}?token={{__token}}">edit</a>
+                    <span>{{token.description}}</span>
                 </li>
-            {{/each}}
+            {{/for}}
         </ul>
     </div>
 </main>
