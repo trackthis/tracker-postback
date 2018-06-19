@@ -26,7 +26,6 @@ $router->respond('POST', '/api/v1/accounts', function() {
     $account = array(
         'username' => $_POST['username'],
         'pubkey'   => $_POST['pubkey'],
-        'mapping'  => '[]',
         'settings' => json_encode(array(
             'admin' => isset($_POST['isAdmin']) ? filter_var($_POST['isAdmin'], FILTER_VALIDATE_BOOLEAN) : false,
         )),
@@ -82,7 +81,6 @@ $router->respond('GET', '/api/v1/accounts/[:username]', function ($request) {
     }
 
     $account['settings'] = json_decode($account['settings'], true);
-    $account['mapping']  = json_decode($account['mapping'], true);
     die(json_encode($account));
 });
 
@@ -115,6 +113,5 @@ $router->respond('DELETE', '/api/v1/accounts/[:username]', function ($request) {
 
     // Return the deleted account
     $account['settings'] = json_decode($account['settings'], true);
-    $account['mapping']  = json_decode($account['mapping'], true);
     die(json_encode($account));
 });
