@@ -120,9 +120,9 @@ textarea, input, button {
 .form-horizontal {
   white-space : nowrap;
   .form-input, .form-actions {
-    display: inline-block;
+    display : inline-block;
   }
-  .form-actions > * {
+  .form-actions > *:not(dialog) {
     display : inline-block;
     width   : auto;
   }
@@ -221,7 +221,9 @@ dialog {
   background : @color-back;
   color      : @color-front;
   &[open] {
-    z-index : 1;
+    position : fixed;
+    top      : 2em;
+    z-index  : 2;
     .close { cursor : pointer; }
     i.material-icons.close {
       .border;
@@ -239,6 +241,7 @@ dialog {
       position   : fixed;
       top        : 0;
       width      : 100%;
+      z-index    : 1;
     }
   }
 }

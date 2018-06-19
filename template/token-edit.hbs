@@ -28,7 +28,14 @@
         </small>
 
         <div class="form-actions">
-            <button>Save</button>
+            <button class="valign"><i class="material-icons">save</i><span>Save</span></button>
+            <button class="valign show-modal"><i class="material-icons">delete</i><span>Delete</span></button>
+            <dialog>
+                <h2>Delete this API token?</h2>
+                <p>Deleting this API token prevents anyone from using this token ever again.</p>
+                <button class="close">Cancel</button>
+                <button>Delete</button>
+            </dialog>
         </div>
     </form>
 
@@ -61,10 +68,19 @@
                     <label rv-for="%rule% | prepend 'translate[' | append ']'">Translate</label>
                 </div>
 
-                <div class="form-actions">
-                    <button class="valign" rv-on-click="form.delrule"><i class="material-icons">delete</i><span>Delete</span></button>
-                    <button class="valign" rv-on-click="form.saverule"><i class="material-icons">save</i><span>Save</span></button>
-                </div>
+                {{#if __settings.admin}}
+                    <div class="form-actions">
+                        <button class="valign" rv-on-click="form.delrule"><i class="material-icons">delete</i><span>Delete</span></button>
+                        <dialog>
+                            <h2>Delete mapping rule</h2>
+                            <p>Deleting this mapping rule might break imports.</p>
+                            <p>Are you sure you want to delete it?</p>
+                            <button class="close">Cancel</button>
+                            <button value="confirm" rv-on-click="form.delrule">Delete</button>
+                        </dialog>
+                        <button class="valign" rv-on-click="form.saverule"><i class="material-icons">save</i><span>Save</span></button>
+                    </div>
+                {{/if}}
 
             </form>
 
