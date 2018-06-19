@@ -46,6 +46,10 @@ $_SERVICE['template'] = function ($c) {
         $data['__pageName'] = $name;
         $data['__query']    = '';
         $data['__token']    = isset($query['token']) ? $query['token'] : '';
+        $data['__auth']     = isset($_REQUEST['auth']) ? $_REQUEST['auth'] : false;
+        $data['__settings'] = $data['__auth'] ? $data['__auth']['account']['settings'] : false;
+        $data['GET']        = $_GET;
+        $data['POST']       = $_POST;
         $params             = explode('?', $_SERVER['REQUEST_URI'], 2);
         array_shift($params);
         if(count($params)) $data['__query'] = array_shift($params);
