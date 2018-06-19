@@ -1,0 +1,76 @@
+{{>precontent}}
+{{>header this}}
+
+<div class="centered">
+
+    <form class="content" onsubmit="return false;" id="tokenGeneric">
+        <h3>Generic settings</h3>
+
+        {{#if __settings.admin}}
+            <div class="form-input">
+                <input type="text" id="username" value="{{GET.account}}" />
+                <label for="username">Username</label>
+            </div>
+        {{/if}}
+
+        <div class="form-input">
+            <input type="text" id="description" />
+            <label for="username">Description</label>
+        </div>
+
+        <div class="form-input">
+            <input type="date" id="description" />
+            <label for="username">Expires*</label>
+        </div>
+
+        <small>
+            * Blank = no expiry date
+        </small>
+
+        <div class="form-actions">
+            <button>Save</button>
+        </div>
+    </form>
+
+</div>
+
+{{#if edit}}
+    <div class="centered">
+        <div class="content" onsubmit="return false;">
+            <h3>Mapping</h3>
+
+            <button class="valign">
+                <i class="material-icons">add</i>
+                <span>New rule</span>
+            </button>
+
+            <form class="form-horizontal" rv-each-rule="form.rules">
+
+                <div class="form-input" >
+                    <input type="text" rv-id="%rule% | prepend 'remote[' | append ']'"/>
+                    <label rv-for="%rule% | prepend 'remote[' | append ']'">Remote</label>
+                </div>
+
+                <div class="form-input" >
+                    <input type="text" rv-id="%rule% | prepend 'tracker[' | append ']'"/>
+                    <label rv-for="%rule% | prepend 'tracker[' | append ']'">Tracker</label>
+                </div>
+
+                <div class="form-input" >
+                    <input type="text" rv-id="%rule% | prepend 'translate[' | append ']'"/>
+                    <label rv-for="%rule% | prepend 'translate[' | append ']'">Translate</label>
+                </div>
+
+                <div class="form-actions">
+                    <button class="valign"><i class="material-icons">delete</i><span>Delete</span></button>
+                    <button class="valign"><i class="material-icons">save</i><span>Save</span></button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+{{/if}}
+
+<script>var tokenid={{token}}</script>
+{{>postcontent}}
