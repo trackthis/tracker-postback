@@ -1,8 +1,8 @@
 <?php
 /** @var \Klein\Klein $router */
 
-// Read all tokens
-$router->respond('GET', '/api/v1/mappings/[i:tokenid]', function ( \Klein\Request $request ) {
+// Read all mappings for token
+$router->respond('GET', '/api/v1/mappings', function ( \Klein\Request $request ) {
     global $_SERVICE;
     $settings          = $_REQUEST['auth']['account']['settings'];
     $settings['admin'] = isset($settings['admin']) ? $settings['admin'] : false;
@@ -13,7 +13,7 @@ $router->respond('GET', '/api/v1/mappings/[i:tokenid]', function ( \Klein\Reques
     // Start building the token query
     /** @var \PicoDb\Database $odm */
     $odm   = $_SERVICE['odm'];
-    $query = $odm->table('token')->eq('id', $request->param('tokenid', 0));
+    $query = $odm->table('token')->eq('id', intval($request->param('tokenid', 0)));
 
     // Add username filter if needed
     if ( isset($_GET['account']) ) {
@@ -36,3 +36,12 @@ $router->respond('GET', '/api/v1/mappings/[i:tokenid]', function ( \Klein\Reques
     // Being here means we're allowed to fetch mappings
     die(json_encode($odm->table('mapping')->eq('token', $token['id'])->findAll()));
 });
+
+// Read single mapping
+// TODO
+
+// Write single mapping
+// TODO
+
+// Delete single mapping
+// TODO

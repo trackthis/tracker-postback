@@ -69,9 +69,7 @@ rv.data.form.saverule = function( event, context ) {
   var getdata     = { token: data.token };
   if ( data.account ) getdata.account = data.account;
 
-  console.log(getdata);
-
-  _.ajax({ 'uri': '/api/v1/mappings/' + token.id, data: getdata }, function(response) {
+  _.ajax({ 'uri': '/api/v1/mappings?tokenid=' + token.id, data: getdata }, function(response) {
     if(response.status !== 200) return;
     while(response.data.length) {
       var mapping = response.data.shift();

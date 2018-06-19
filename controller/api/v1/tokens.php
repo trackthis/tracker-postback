@@ -38,3 +38,12 @@ $router->respond('GET', '/api/v1/tokens', function () {
         return $result;
     }, $query->findAll())));
 });
+
+// Read single token
+// TODO
+
+// Write token
+// TODO
+
+// Delete token
+// TODO
