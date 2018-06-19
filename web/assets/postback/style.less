@@ -50,11 +50,11 @@ pre {
 /* Main layouts */
 .centered {
   text-align : center;
-}
-main.centered > * {
-  display        : inline-block;
-  text-align     : initial;
-  vertical-align : top;
+  > * {
+    display        : inline-block;
+    text-align     : initial;
+    vertical-align : top;
+  }
 }
 
 /* Icon fix */
@@ -117,6 +117,16 @@ textarea, input, button {
   padding  : 0;
   margin   : 1rem;
 }
+.form-horizontal {
+  white-space : nowrap;
+  .form-input, .form-actions {
+    display: inline-block;
+  }
+  .form-actions > * {
+    display : inline-block;
+    width   : auto;
+  }
+}
 button, .button, .btn {
   .border;
   background : @color-back;
@@ -168,10 +178,10 @@ header {
 .valign {
   white-space : nowrap;
   > *:not(dialog):not(.cover) {
+    vertical-align : middle;
     &:not(.material-icons) {
       line-height : 1.5em;
     }
-    float: left;
   }
   > * + :not(dialog):not(.cover) {
     margin-left : 0.25rem;
