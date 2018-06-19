@@ -51,6 +51,7 @@ $router->respond('GET', '/admin/[:username]', function( $request ) {
 
     // Reply with the edit page
     $account['settings'] = json_decode($account['settings'], true);
+    $account['mapping']  = json_decode($account['mapping'], true);
     die($_SERVICE['template']('admin-edit', array(
         "account" => $account,
 //        "tokens"  => $tokens
