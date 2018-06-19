@@ -144,7 +144,7 @@ if(is_file($path)) {
             exit(0);
         default:
             if(isset($mimeTypes[$ext])) $headers[]='Content-Type: '.$mimeTypes[$ext];
-            $headers[]='Expires:'.date('c',time()+300);
+            header('Expires:'.date('c',time()+300));
             readfile($path);
             exit(0);
     }
