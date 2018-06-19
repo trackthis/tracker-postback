@@ -52,7 +52,7 @@ $router->respond('GET', '/admin/[:username]', function( $request ) {
     // Reply with the edit page
     $account['settings'] = json_decode($account['settings'], true);
     die($_SERVICE['template']('admin-edit', array(
+        "title"   => 'Edit account: ' . $account['username'],
         "account" => $account,
-//        "tokens"  => $tokens
     )));
 });

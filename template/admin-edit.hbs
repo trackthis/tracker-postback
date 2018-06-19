@@ -1,5 +1,5 @@
 {{>precontent}}
-{{>header this edit=account.username}}
+{{>header this}}
 
 <main class="centered">
 
@@ -56,7 +56,7 @@
         <h3>API Tokens</h3>
 
         <ul class="list-bordered">
-            <li class="valign" href="/tokens/new?user={{account.username}}&token={{__token}}">
+            <li class="valign" href="/tokens/new?account={{account.username}}&token={{__token}}">
                 <i class="material-icons">add</i>
                 <span>New API token</span>
             </li>
