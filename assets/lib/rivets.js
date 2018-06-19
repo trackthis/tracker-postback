@@ -14,6 +14,14 @@ rv.updateDom              = function (arg, resolve, reject) {
   }
 };
 
+rivets.formatters.prepend = function( origin, arg ) {
+  return arg + origin;
+};
+
+rivets.formatters.append = function( origin, arg ) {
+  return origin + arg;
+};
+
 // Bind once the current run of code is done
 setTimeout(function(){
   rv.bindings = rivets.bind(document.body, rv.data).bindings;
