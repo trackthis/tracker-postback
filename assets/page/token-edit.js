@@ -10,6 +10,19 @@ rv.data.form.account = { isAdmin: false };
 rv.data.form.tokenid = token.id;
 rv.data.form.rules   = [];
 
+// Revert function for common savings
+function revert(orgs) {
+  if(!Array.isArray(orgs)) return;
+  orgs.forEach(function(org) {
+    if(!org.el) return;
+    if ( 'html'  in org ) org.el.innerHTML = org.html;
+    if ( 'text'  in org ) org.el.innerText = org.text;
+    if ( 'dis'   in org ) org.el.disabled  = org.dis;
+    if ( 'class' in org ) org.el.className = org.class;
+  });
+  return false;
+}
+
 // Upgrade a dialog after rivets
 function fancyDialog(target) {
   if(Array.isArray(target)) return target.map(fancyDialog);
@@ -52,19 +65,29 @@ rv.data.form.delrule = function( event, context ) {
     var deldata     = { token: data.token };
     if ( data.account ) deldata.account = data.account;
 
-    _.ajax({
-      method : 'DELETE',
-      uri    : '/api/v1/mappings/' + context['rule'].id,
-      data   : deldata
-    }, function(response) {
-      console.log(response);
+    // Disable all buttons
+    var orgs = _(dialog).find('button').map(function(btn) {
+      var org = { el: btn, html: btn.innerHTML, dis: btn.disabled };
+      btn.innerText = 'Deleting...';
+      btn.disabled  = true;
+      return org;
     });
 
+    // Allow button redraw
+    setTimeout(function() {
 
-    dialog.close();
-    // TODO: API CALL
-    var index = context['%rule%'];
-    context.form.rules.splice(index,1);
+      // Make the call
+      _.ajax({
+        method : 'DELETE',
+        uri    : '/api/v1/mappings/' + context['rule'].id,
+        data   : deldata
+      }, function(response) {
+        if ( response.status !== 200 ) return revert(orgs);
+        var index = context['%rule%'];
+        context.form.rules.splice(index,1);
+        dialog.close();
+      });
+    }, 10);
     return false;
   }
 
