@@ -69,8 +69,12 @@ $router->respond(function () {
         return;
     }
 
-    // Insert the detected auth into the request
-    $account['settings'] = json_decode($account['settings'],true);
+    // Decode settings
+    $account['settings']          = json_decode($account['settings'],true);
+    $account['settings']['admin'] = isset($account['settings']['admin']) ? !!$account['settings']['admin'] : false;
+    $account['settings']['token'] = $account['settings']['admin'] ? true : (isset($account['settings']['token']) ? !!$account['settings']['token'] : false);
+
+    // Insert the auth into the request
     $_REQUEST['auth'] = array(
         'account' => $account,
         'method'  => 'JWT',
