@@ -11,7 +11,10 @@ rv.data.api.tokens   = [];
 
 // Fetch API tokens
 (function() {
-  _.ajax({ 'uri': '/api/v1/tokens/'+account.username, data: data }, function(response) {
+  var getdata     = { token: data.token };
+  getdata.account = account.username;
+
+  _.ajax({ 'uri': '/api/v1/tokens', data: getdata }, function(response) {
     if(response.status !== 200) return;
     while(response.data.length) {
       var token  = response.data.shift();
