@@ -72,6 +72,6 @@
     </div>
 {{/if}}
 
-<script>var token={{token}}</script>
+<script>var token={{{json token}}};</script>
 {{#if edit}}{{#if token.expires}}<script>tokenExpires.valueAsNumber = Math.floor({{token.expires}}/60)*60000;</script>{{/if}}{{/if}}
 {{>postcontent}}

@@ -30,16 +30,18 @@ rv.data.form.saverule = function( event, context ) {
   console.log(context.rule);
 };
 
-// // Fetch API tokens
-// (function() {
-//   var getdata     = { token: data.token };
-//   getdata.account = account.username;
-//
-//   _.ajax({ 'uri': '/api/v1/tokens', data: getdata }, function(response) {
-//     if(response.status !== 200) return;
-//     while(response.data.length) {
-//       var token  = response.data.shift();
-//       rv.data.api.tokens.push(token);
-//     }
-//   });
-// })();
+// Fetch API tokens
+(function() {
+  var getdata     = { token: data.token };
+  if ( data.account ) getdata.account = data.account;
+
+  console.log(getdata);
+
+  _.ajax({ 'uri': '/api/v1/mappings/' + token.id, data: getdata }, function(response) {
+    if(response.status !== 200) return;
+    while(response.data.length) {
+      var mapping = response.data.shift();
+      rv.data.form.rules.push(mapping);
+    }
+  });
+})();
