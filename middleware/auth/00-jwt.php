@@ -18,7 +18,9 @@ $router->respond(function () {
     // Detect auth
     $raw = false;
     $raw = isset($_GET['token'])  ? $_GET['token']  : $raw;
+    $raw = isset($_GET['auth'])   ? $_GET['auth']   : $raw;
     $raw = isset($_POST['token']) ? $_POST['token'] : $raw;
+    $raw = isset($_POST['auth'])  ? $_POST['auth']  : $raw;
     $raw = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : $raw;
     if ($raw === false) {
         return;

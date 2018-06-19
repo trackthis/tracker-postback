@@ -41,7 +41,9 @@ $router->respond('GET', '/api/v1/mappings', function ( \Klein\Request $request )
 // TODO
 
 // Write single mapping
-// TODO
+$router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request ) {
+    die('dinges');
+});
 
 // Delete single mapping
 $router->respond('DELETE', '/api/v1/mappings/[i:id]', function ( \Klein\Request $request ) {

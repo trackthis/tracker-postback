@@ -44,15 +44,34 @@ function fancyDialog(target) {
 
 // RV actions
 rv.data.form.addrule = function( event, context ) {
-  // TODO: fetch new data from create api
-  context.form.rules.push({
-    'id'       : '', // TODO
-    'token'    : context.form.tokenid,
-    'account'  : '', // TODO
-    'remote'   : '',
-    'tracker'  : '',
-    'translate': ''
+  var btn = event.target;
+  while(btn.tagName!=='BUTTON') btn = btn.parentNode;
+  // Auth because a mapping contains a 'token' field
+  var postdata = { auth: data.token, token: context.form.tokenid };
+  if ( data.account ) postdata.account = data.account;
+
+  _.ajax({
+    'method': 'POST',
+    'uri'   : '/api/v1/mappings',
+    'data'  : postdata
+  }, function(response) {
+    console.log(response);
   });
+
+
+  console.log(postdata);
+  console.log(btn);
+
+
+  // // TODO: fetch new data from create api
+  // context.form.rules.push({
+  //   'id'       : '', // TODO
+  //   'token'    : context.form.tokenid,
+  //   'account'  : '', // TODO
+  //   'remote'   : '',
+  //   'tracker'  : '',
+  //   'translate': ''
+  // });
 };
 rv.data.form.delrule = function( event, context ) {
   var btn = event.target;
