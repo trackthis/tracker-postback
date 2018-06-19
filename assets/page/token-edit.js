@@ -31,6 +31,7 @@ function fancyDialog(target) {
 
 // RV actions
 rv.data.form.addrule = function( event, context ) {
+  // TODO: fetch new data from create api
   context.form.rules.push({
     'id'       : '', // TODO
     'token'    : context.form.tokenid,
@@ -48,6 +49,18 @@ rv.data.form.delrule = function( event, context ) {
 
   // Confirmed = go ahead
   if ( btn.value === 'confirm' ) {
+    var deldata     = { token: data.token };
+    if ( data.account ) deldata.account = data.account;
+
+    _.ajax({
+      method : 'DELETE',
+      uri    : '/api/v1/mappings/' + context['rule'].id,
+      data   : deldata
+    }, function(response) {
+      console.log(response);
+    });
+
+
     dialog.close();
     // TODO: API CALL
     var index = context['%rule%'];
@@ -66,10 +79,10 @@ rv.data.form.saverule = function( event, context ) {
 
 // Fetch API tokens
 (function() {
-  var getdata     = { token: data.token };
+  var getdata     = { token: data.token, tokenid: token.id };
   if ( data.account ) getdata.account = data.account;
 
-  _.ajax({ 'uri': '/api/v1/mappings?tokenid=' + token.id, data: getdata }, function(response) {
+  _.ajax({ 'uri': '/api/v1/mappings', data: getdata }, function(response) {
     if(response.status !== 200) return;
     while(response.data.length) {
       var mapping = response.data.shift();
