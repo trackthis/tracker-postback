@@ -34,6 +34,24 @@
         </div>
     </form>
 
+    <form class="content" onsubmit="return false;" id="updatePermissions">
+        <h3>Permissions</h3>
+
+        <!--<div class="form-input disabled">-->
+            <!--<input disabled type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" />-->
+            <!--<label for="password">Password</label>-->
+        <!--</div>-->
+
+        <!--<div class="form-input disabled">-->
+            <!--<input disabled type="password" id="password-repeat" pattern=".{8,}" required title="Must match the above password" />-->
+            <!--<label for="password-repeat">Repeat password</label>-->
+        <!--</div>-->
+
+        <!--<div class="form-actions disabled">-->
+            <!--<button disabled>TODO</button>-->
+        <!--</div>-->
+    </form>
+
     <div class="content">
         <h3>API Tokens</h3>
 
@@ -54,7 +72,7 @@
                             <button class="border" rv-on-click="token.delete">Yes, I'm sure</button>
                         </div>
                     </dialog>
-                    <a class="material-icons show-modal" {{!--href="/tokens/[[token.id]]?token={{__token}}"--}}>edit</a>
+                    <a class="material-icons show-modal" rv-href="token.id | prepend '/tokens/' | append '?token={{__token}}'">edit</a>
                     <span>[[token.description]]</span>
                 </li>
         </ul>
