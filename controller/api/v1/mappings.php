@@ -106,32 +106,18 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     } else {
         $result = $odm->table('mapping')->insert($mapping);
     }
+
+    // Sorry, PicoDB has no way to extract errors
+    if(!$result) {
+        $_REQUEST['status'] = 400;
+        die('{"error":400,"description":"Bad request"}');
+    }
+
+    // Add the ID to the output if needed
     $mapping['id'] = isset($mapping['id']) ? $mapping['id'] : $odm->getLastId();
 
-//    if(!$result) {
-//        /** @var PDO $con */
-//        $con = $GLOBALS['pdoError'];
-//        die($con->errorCode().':'.json_encode($con->errorInfo()));
-//    }
-
-
-//    // Fetch initial data
-//    $mapping = array( 'account' => $username, 'token' => false );
-//    if ($request->param('id',false)) {
-//
-//    }
-//
-//    // Write-once fields
-//    if ( (!$mapping['token']) && $request->param('token',false) ) {
-//        $mapping['token'] = $request->param('token');
-//    }
-//
-//    // Writable fields
-
-
-
-
-    die(json_encode(array($token,$mapping)));
+    // Return the mapping record
+    die(json_encode($mapping));
 });
 
 // Delete single mapping
