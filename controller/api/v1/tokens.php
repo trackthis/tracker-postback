@@ -164,6 +164,15 @@ $router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $re
         die('{"error":403,"description":"Permission denied"}');
     }
 
+    // Delete it's mappings
+    $result = $odm->table('mapping')->eq('token',$token['id'])->remove();
+
+    // Sorry, PicoDB has no way to extract errors
+    if(!$result) {
+        $_REQUEST['status'] = 400;
+        die('{"error":400,"description":"Bad request"}');
+    }
+
     // Being here means we're allowed to delete the token
     die(json_encode($odm->table('token')->eq('id', $token['id'])->remove()));
 });
