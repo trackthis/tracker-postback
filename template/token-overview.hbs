@@ -1,6 +1,41 @@
 {{>precontent}}
 {{>header this}}
 
-TOKEN OVERVIEW!!!
+<main class="centered">
+    <div class="content">
+        <h2>{{#if me}}Your{{else}}{{username}}'s {{/if}} API tokens</h2>
+        <!--<p>Select a user to modify or create a new one</p>-->
+
+        <ul class="list-bordered">
+            {{#if __settings.admin}}
+                <li class="valign" href="/tokens/new?account={{username}}&token={{__token}}">
+                    <i class="material-icons">add</i>
+                    <span>New API token</span>
+                </li>
+            {{/if}}
+
+            <li class="valign" rv-unless="tokens | length">
+                No tokens yet.
+            </li>
+
+            <li class="valign" rv-each-token="tokens">
+                {{#if __settings.admin}}
+                    <a class="material-icons" {{!rv-on-click="token.delete"}}>delete</a>
+                    <dialog>
+                        <h2>Delete API token</h2>
+                        <p>Are you sure you want to delete the API token with the following description?</p>
+                        <pre>[[token.description]]</pre>
+                        <div>
+                            <button class="border close">Cancel</button>
+                            <button class="border" {{!rv-on-click="token.delete"}}>Yes, I'm sure</button>
+                        </div>
+                    </dialog>
+                {{/if}}
+                <a class="material-icons show-modal" rv-href="token.id | prepend '/tokens/' | append '?token={{__token}}'">{{#if __settings.admin}}edit{{else}}details{{/if}}</a>
+                <span>[[token.description]]</span>
+            </li>
+        </ul>
+    </div>
+</main>
 
 {{>postcontent}}

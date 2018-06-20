@@ -2,10 +2,28 @@
 /** @var \Klein\Klein $router */
 
 
-$router->respond('/tokens',function () {
+$router->respond('/tokens',function ( \Klein\Request $request ) {
     global $_SERVICE;
+    $isAdmin  = isset($_REQUEST['auth']['account']['settings']['admin']) ? $_REQUEST['auth']['account']['settings']['admin'] : false;
+    $params   = $request->params();
 
-    die($_SERVICE['template']('token-overview'));
+    // Fetch username to use
+    // TODO: Make this code generic (it's used often)
+    if ( isset($params['account']) ) {
+        if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
+            $_REQUEST['status'] = 403;
+            die('{"error":403,"description":"Permission denied"}');
+        }
+        $username = $params['account'];
+    } else {
+        $username = $_REQUEST['auth']['account']['username'];
+    }
+
+
+    die($_SERVICE['template']('token-overview', array(
+        "username" => $username,
+        "me"       => ($username===$_REQUEST['auth']['account']['username'])
+    )));
 });
 
 $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
