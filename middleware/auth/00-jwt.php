@@ -47,7 +47,7 @@ $router->respond(function () {
     // Verify header
     if ((isset($header['typ'])?$header['typ']:false) !== 'JWT') return;
     if ((isset($header['alg'])?$header['alg']:false) !== 'ES256') return;
-    // TODO: verify expiry
+    // TODO: verify expiry (after dev is done)
 
     // Fetch it's user
     $username = isset($payload['usr']) ? $payload['usr'] : false;
