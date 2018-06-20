@@ -58,8 +58,11 @@ rv.data.form.addrule = function( event, context ) {
   setTimeout(function() {
 
     // Auth because a mapping contains a 'token' field
-    var postdata = {auth:data.token,token:token.id};
-    if ( data.account ) postdata.account = data.account;
+    var postdata = {
+      account : token.username || data.account,
+      auth    : data.token,
+      token   : token.id
+    };
 
     // Make the call
     _.ajax({
