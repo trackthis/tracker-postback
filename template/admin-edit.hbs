@@ -7,7 +7,7 @@
         <h3>Username</h3>
 
         <div class="form-input disabled">
-            <input type="text" id="username" disabled value="{{account.username}}" />
+            <input type="text" id="username" disabled rv-value="account.username" />
             <label for="username">Username</label>
         </div>
 
@@ -19,21 +19,22 @@
     <form class="content" onsubmit="return false;" id="updatePassword">
         <h3>Password update</h3>
 
-        <div class="form-input disabled">
-            <input disabled type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" />
+        <div class="form-input">
+            <input type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" rv-value="account.password" />
             <label for="password">Password</label>
         </div>
 
-        <div class="form-input disabled">
-            <input disabled type="password" id="password-repeat" pattern=".{8,}" required title="Must match the above password" />
+        <div class="form-input">
+            <input type="password" id="password-repeat" pattern=".{8,}" required title="Must match the above password" />
             <label for="password-repeat">Repeat password</label>
         </div>
 
-        <div class="form-actions disabled">
-            <button disabled>TODO</button>
+        <div class="form-actions">
+            <button rv-on-click="account.passwordUpdate">Update</button>
         </div>
     </form>
 
+    {{!
     <form class="content" onsubmit="return false;" id="updatePermissions">
         <h3>Permissions</h3>
 
@@ -51,7 +52,7 @@
         <!--<div class="form-actions disabled">-->
             <!--<button disabled>TODO</button>-->
         <!--</div>-->
-    </form>
+    </form>}}
 
     <div class="content">
         <h3>API Tokens</h3>

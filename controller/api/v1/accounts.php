@@ -46,42 +46,49 @@ $router->respond('GET', '/api/v1/accounts/[:username]', function ($request) {
 });
 
 // Write an account
-$router->respond('POST', '/api/v1/accounts', function() {
+$router->respond('POST', '/api/v1/accounts', function( \Klein\Request $request ) {
     global $_SERVICE;
     $isAdmin = isset($_REQUEST['auth']['account']['settings']['admin']) ? $_REQUEST['auth']['account']['settings']['admin'] : false;
+    $params  = $request->params();
     header("Content-Type: application/json");
 
-    // Only admins are allowed to create users
+    // Only admins are allowed to create/update users
     if (!$isAdmin) {
         $_REQUEST['status'] = 403;
         die('{"error":403,"description":"Permission denied"}');
     }
 
     // Validate given username
-    if(!preg_match("/^[ a-zA-Z0-9\\-_]{3,}\$/", $_POST['username'])) {
+    if(!preg_match("/^[ a-zA-Z0-9\\-_]{3,}\$/", $params['username'])) {
         $_REQUEST['status'] = 422;
         die(json_encode(array(
             "error"       => 422,
             "description" => "The username did not meet the requirements: /^[ a-zA-Z0-9\\-_]{3,}\$/"
         )));
     }
-
-    // Create new account record
-    $account = array(
-        'username' => $_POST['username'],
-        'pubkey'   => $_POST['pubkey'],
-        'settings' => json_encode(array(
-            'admin' => isset($_POST['isAdmin']) ? filter_var($_POST['isAdmin'], FILTER_VALIDATE_BOOLEAN) : false,
-        )),
-    );
-
-    // Insert into database
     /** @var \PicoDb\Database $odm */
     $odm    = $_SERVICE['odm'];
-    $result = $odm->table('account')->insert($account);
 
-    // Return what happened
-    die('{"success":'.($result?'true':'false').'}');
+    // Check if it already exists
+    if($account = $odm->table('account')->eq('username',$params['username'])->findOne()) {
+        // Update an existing user
+        $account['settings']          = json_decode($account['settings'],true);
+        $account['pubkey']            = $request->param('pubkey', $account['pubkey']);
+        $account['settings']['admin'] = $request->param('isAdmin', $account['settings']['admin']);
+        $account['settings']['token'] = $request->param('showToken', $account['settings']['token']);
+        $account['settings']          = json_encode($account['settings']);
+        die(json_encode($odm->table('account')->eq('username',$account['username'])->update($account)));
+    } else {
+        // Create new account record
+        die(json_encode($odm->table('account')->insert(array(
+            'username' => $params['username'],
+            'pubkey'   => $params['pubkey'],
+            'settings' => json_encode(array(
+                'admin' => filter_var($request->param('isAdmin',false), FILTER_VALIDATE_BOOLEAN),
+                'token' => filter_var($request->param('isAdmin',$request->param('showToken',false)), FILTER_VALIDATE_BOOLEAN)
+            )),
+        ))));
+    }
 });
 
 // Delete an account

@@ -3,11 +3,17 @@ window._.ajax = require('../lib/ajax');
 window.rv     = require('../lib/rivets');
 
 var q      = require('../lib/query'),
-    data   = q.decode(window.location.search||'');
+    data   = q.decode(window.location.search||''),
+    EC     = require('elliptic').ec,
+    crypto = require('crypto');
+
+function sha256 (src) {
+  return crypto.createHash('sha256').update(src).digest();
+}
 
 // Prepare rv data
-rv.data.form.account = { isAdmin: false };
-rv.data.api.tokens   = [];
+rv.data.account    = {};
+rv.data.api.tokens = [];
 
 // Revert function for common savings
 function revert(orgs) {
@@ -41,14 +47,77 @@ function fancyDialog(target) {
   return true;
 }
 
+// Generates private key with pbkdf2 (between 1e3 & 1e6 iterations)
+function generateSecret(username, password) {
+  var _hash  = sha256(username).toString('hex'),
+      result = 0;
+  while (_hash.length) {
+    result = ((result * 16) + parseInt(_hash.substr(0, 1), 16)) % (1e6 - 1e3);
+    _hash  = _hash.substr(1);
+  }
+  return crypto.pbkdf2Sync(password,username,result+1e3,64,'sha256');
+}
+
 // Fetch our own account
 (function() {
   _.ajax({ 'uri': '/api/v1/user/me', data: data }, function(response) {
     if(response.status!==200) return;
     if(!response.data.settings) return;
-    rv.data.form.account.username  = response.data.username       || false;
-    rv.data.form.account.isAdmin   = response.data.settings.admin || false;
-    rv.data.form.account.showToken = response.data.settings.token || false;
+    Object.assign(rv.data.account,response.data);
+
+    rv.data.account.passwordUpdate = function( event, context ) {
+      var btn = this,
+          frm = this;
+      while(frm.tagName!=='FORM') frm = frm.parentNode;
+      if(!frm.reportValidity()) return;
+
+      // Disable button
+      var orgs = [{ el: btn, html: btn.innerHTML, dis: btn.disabled }];
+      btn.innerText = 'Generating key pair...';
+      btn.disabled  = true;
+
+      // Allow button redraw
+      setTimeout(function() {
+
+        // Generate full KP
+        var ec  = new EC('p256'),
+            pri = generateSecret(rv.data.account.username, rv.data.account.password).toString('hex'),
+            kp  = ec.keyFromPrivate(pri);
+
+        // Change button text
+        orgs.forEach(function(record) {
+          record.el.innerHTML = 'Updating user...';
+        });
+
+        // Allow button redraw
+        setTimeout(function() {
+          console.log(pri);
+          console.log(kp);
+          console.log(btn);
+
+          // Create post data
+          var postdata = {
+            token    : data.token||'',
+            username : rv.data.account.username,
+            pubkey   : kp.getPublic('hex')
+          };
+
+          // Submit what we just did
+          _.ajax({
+            method : 'POST',
+            uri    : "/api/v1/accounts",
+            data   : postdata
+          }, function(response) {
+            if (response.status!==200) {
+              console.log('TODO: error handling');
+              return;
+            }
+            window.location.href = '/admin/' + postdata.username + '?' + q.encode(data);
+            revert(orgs);
+          });
+        }, 10);
+      }, 10);
+    };
   });
 })();
 
