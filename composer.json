@@ -21,7 +21,9 @@
     "fguillot/picodb": "@stable",
     "pimple/pimple": "@stable",
     "finwo/property-accessor": "^0.1.4",
-    "xamin/handlebars.php": "@stable",
+    "xamin/handlebars.php": "@stable"
+  },
+  "require-dev": {
     "heroku/heroku-buildpack-php": "dev-master"
   }
 }
