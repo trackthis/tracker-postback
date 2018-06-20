@@ -64,14 +64,13 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
 
     // Fetch username to use
     // TODO: Make this code generic (it's used often)
-    $params = $request->params();
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
             $_REQUEST['status'] = 403;
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
-    } elseif(!$isAdmin) {
+    } else {
         $username = $_REQUEST['auth']['account']['username'];
     }
 
@@ -117,5 +116,54 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
     die(json_encode($token));
 });
 
-// Delete token
-// TODO
+// Write token
+$router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $request ) {
+    global $_SERVICE;
+    $settings          = $_REQUEST['auth']['account']['settings'];
+    $settings['admin'] = isset($settings['admin']) ? $settings['admin'] : false;
+    $settings['token'] = isset($settings['token']) ? $settings['token'] : false;
+    $isAdmin           = isset($settings['admin']) ? $settings['admin'] : false;
+    $params            = $request->params();
+    header("Content-Type: application/json");
+
+    // Only admins may delete tokens
+    if (!$isAdmin) {
+        $_REQUEST['status'] = 403;
+        die('{"error":403,"description":"Permission denied"}');
+    }
+
+    /** @var \PicoDb\Database $odm */
+    $odm = $_SERVICE['odm'];
+
+    // Fetch username to use
+    // TODO: Make this code generic (it's used often)
+    if ( isset($params['account']) ) {
+        if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
+            $_REQUEST['status'] = 403;
+            die('{"error":403,"description":"Permission denied"}');
+        }
+        $username = $params['account'];
+    } else {
+        $username = $_REQUEST['auth']['account']['username'];
+    }
+
+    // Verify ID param
+    if (!intval($request->param('id',false))) {
+        $_REQUEST['status'] = 400;
+        die('{"error":400,"description":"Bad request"}');
+    }
+
+    // Fetch token
+    $token = $odm->table('token')->eq('id', $request->param('id'))->findOne();
+    if (is_null($token)) {
+        $_REQUEST['status'] = 404;
+        die('{"error":404,"description":"Not found"}');
+    }
+    if ($username !== $token['username']) {
+        $_REQUEST['status'] = 403;
+        die('{"error":403,"description":"Permission denied"}');
+    }
+
+    // Being here means we're allowed to delete the token
+    die(json_encode($odm->table('token')->eq('id', $token['id'])->remove()));
+});

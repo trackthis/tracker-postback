@@ -68,7 +68,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
-    } elseif(!$isAdmin) {
+    } else {
         $username = $_REQUEST['auth']['account']['username'];
     }
 
