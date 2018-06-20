@@ -3,7 +3,7 @@
 # Clean up old fifos
 rm fifo.* 2>/dev/null
 
-test -v "$PORT" || PORT=5000
+test -n "$PORT" || PORT=5000
 XRARGS="-f -x -s http:0.0.0.0:$PORT"
 
 # Heroku environment
