@@ -104,6 +104,7 @@ rv.data.form.delrule = function( event, context ) {
         if ( response.status !== 200 ) return revert(orgs);
         var index = context['%rule%'];
         context.form.rules.splice(index,1);
+        revert(orgs);
         dialog.close();
       });
     }, 10);
