@@ -50,7 +50,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     $isAdmin           = isset($settings['admin']) ? $settings['admin'] : false;
     header("Content-Type: application/json");
 
-    // Only admins may create mappings
+    // Only admins may create/update mappings
     if (!$isAdmin) {
         $_REQUEST['status'] = 403;
         die('{"error":403,"description":"Permission denied"}');

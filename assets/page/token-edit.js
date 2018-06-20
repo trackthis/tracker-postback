@@ -46,32 +46,32 @@ function fancyDialog(target) {
 rv.data.form.addrule = function( event, context ) {
   var btn = event.target;
   while(btn.tagName!=='BUTTON') btn = btn.parentNode;
-  // Auth because a mapping contains a 'token' field
-  var postdata = { auth: data.token, token: context.form.tokenid };
-  if ( data.account ) postdata.account = data.account;
 
-  _.ajax({
-    'method': 'POST',
-    'uri'   : '/api/v1/mappings',
-    'data'  : postdata
-  }, function(response) {
-    console.log(response);
-  });
+  // Disable the button
+  var orgs = [{ el: btn, html: btn.innerHTML, dis: btn.disabled }];
+  btn.innerText = 'Creating...';
+  btn.disabled  = true;
 
+  // Allow button redraw
+  setTimeout(function() {
 
-  console.log(postdata);
-  console.log(btn);
+    // Auth because a mapping contains a 'token' field
+    var postdata = {auth:data.token,token:context.form.tokenid};
+    if ( data.account ) postdata.account = data.account;
 
+    // Make the call
+    _.ajax({
+      'method': 'POST',
+      'uri'   : '/api/v1/mappings',
+      'data'  : postdata
+    }, function(response) {
+      if(response.status!==200) return revert(orgs);
 
-  // // TODO: fetch new data from create api
-  // context.form.rules.push({
-  //   'id'       : '', // TODO
-  //   'token'    : context.form.tokenid,
-  //   'account'  : '', // TODO
-  //   'remote'   : '',
-  //   'tracker'  : '',
-  //   'translate': ''
-  // });
+      // Add to the list
+      context.form.rules.push(response.data);
+      revert(orgs);
+    });
+  }, 10);
 };
 rv.data.form.delrule = function( event, context ) {
   var btn = event.target;
