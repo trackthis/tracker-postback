@@ -55,7 +55,7 @@ function accountDelete( event, context ) {
     uri    : "/api/v1/accounts/" + context.account.username,
     data   : data
   }, function(response) {
-    if (response.status === 200) {
+    if ([200,404].indexOf(response.status)>=0) {
       document.location.reload(true);
     }
   });
