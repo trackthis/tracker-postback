@@ -184,8 +184,43 @@ rv.data.form.savetoken = function( event, context ) {
 };
 
 rv.data.form.deltoken = function( event, context ) {
-  console.log(arguments);
+  var btn = event.target;
+  while(btn.tagName!=='BUTTON') btn = btn.parentNode;
+
+  // Disable the button
+  var orgs = [{ el: btn, html: btn.innerHTML, dis: btn.disabled }];
+  btn.innerText = 'Deleting...';
+  btn.disabled  = true;
+
+  // Allow button redraw
+  setTimeout(function () {
+
+    _.ajax({
+      'method' : 'DELETE',
+      'uri'    : '/api/v1/tokens/' + token.id,
+      'data'   : data
+    }, function(response) {
+      if (response.status!==200) revert(orgs);
+      revert(orgs);
+      if (response.data) {
+        var uri = rv.data.form.account.isAdmin ? '/admin/'+context.token.username : '/tokens';
+        uri += '?token='+data.token;
+        window.location.href = uri;
+      }
+    });
+  }, 10);
 };
+
+// Fetch our own account
+(function() {
+  _.ajax({ 'uri': '/api/v1/user/me', data: data }, function(response) {
+    if(response.status!==200) return;
+    if(!response.data.settings) return;
+    rv.data.form.account.username  = response.data.username       || false;
+    rv.data.form.account.isAdmin   = response.data.settings.admin || false;
+    rv.data.form.account.showToken = response.data.settings.token || false;
+  });
+})();
 
 // Fetch token mappings
 (function() {
