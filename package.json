@@ -4,6 +4,7 @@
   "description": "Trackthis Postback tracker",
   "main": "index.js",
   "scripts": {
+    "postinstall": "node build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
