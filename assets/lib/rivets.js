@@ -22,6 +22,11 @@ rivets.formatters.append = function( origin, arg ) {
   return origin + arg;
 };
 
+rivets.formatters.length = function( origin ) {
+  if ( 'length' in origin ) return parseInt(origin.length);
+  return 0;
+};
+
 function flen(n,l) {
   return ('0'.repeat(l||2)+n).slice(-(l||2));
 }
