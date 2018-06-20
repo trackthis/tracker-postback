@@ -48,6 +48,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     $settings['admin'] = isset($settings['admin']) ? $settings['admin'] : false;
     $settings['token'] = isset($settings['token']) ? $settings['token'] : false;
     $isAdmin           = isset($settings['admin']) ? $settings['admin'] : false;
+    $username          = false;
     header("Content-Type: application/json");
 
     // Only admins may create/update mappings
@@ -68,13 +69,14 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
-    } else {
+    } elseif (!$isAdmin) {
         $username = $_REQUEST['auth']['account']['username'];
     }
 
-    // Fetch the related token
-    $query = $odm->table('token')->eq('username', $username);
-    if(intval($request->param('token',false))) $query = $query->eq('id', $request->param('token'));
+    // Fetch the token (something about ownership)
+    $query = $odm->table('token');
+    if($username) $query = $query->eq('username', $username);
+    if(intval($request->param('token',false))) $query = $query->eq('id', intval($request->param('token')));
     $token = $query->findOne();
     if(is_null($token)) {
         $_REQUEST['status'] = 404;
