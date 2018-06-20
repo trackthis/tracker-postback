@@ -37,6 +37,7 @@
     <form class="content" onsubmit="return false;" id="updatePermissions">
         <h3>Permissions</h3>
 
+        <p>TODO</p>
         <!--<div class="form-input disabled">-->
             <!--<input disabled type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" />-->
             <!--<label for="password">Password</label>-->
@@ -62,7 +63,7 @@
             </li>
 
                 <li class="valign" rv-each-token="api.tokens">
-                    <a class="material-icons show-modal" href="#!">delete</a>
+                    <a class="material-icons" rv-on-click="token.delete">delete</a>
                     <dialog>
                         <h2>Delete API token</h2>
                         <p>Are you sure you want to delete the API token with the following description?</p>
