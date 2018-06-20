@@ -106,12 +106,17 @@ $router->respond('DELETE', '/api/v1/accounts/[:username]', function ($request) {
         die('{"error":404,"description":"The requested entity could not be found"}');
     }
 
-    // Delete API tokens & the account itself
-    $result  = true;
-    $result &= $odm->table('token')->eq('username', $account['username'])->remove();
-    $result &= $odm->table('account')->eq('username', $account['username'])->remove();
+    // Fetch all API tokens
+    $tokens = $odm->table('token')->eq('username', $account['username'])->findAllByColumn('id');
 
-    // TODO: delete mappings
+    // Delete all mappings
+    $result = $odm->table('mapping')->in('token',$tokens)->remove();
+
+    // Delete all API tokens
+    $result &= $odm->table('token')->in('id', $tokens)->remove();
+
+    // Delete the account itself
+    $result &= $odm->table('account')->eq('username', $account['username'])->remove();
 
     // Return the deleted account
     $account['settings'] = json_decode($account['settings'], true);
