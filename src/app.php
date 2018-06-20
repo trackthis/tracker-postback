@@ -21,6 +21,18 @@ if (isset($_SERVER['argc'])) {
     require(APPROOT . DS . 'init.php');
 }
 
+if(!function_exists('random_character')) {
+    function random_character( $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
+        return substr($alphabet,rand(0,strlen($alphabet)-1),1);
+    }
+}
+
+if(!function_exists('random_string')) {
+    function random_string( $length = 8, $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
+        return implode(array_map('random_character',array_fill(0,$length,$alphabet)));
+    }
+}
+
 // Initialize service handler
 $_SERVICE = new Pimple\Container();
 
