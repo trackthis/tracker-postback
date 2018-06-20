@@ -28,6 +28,8 @@ function flen(n,l) {
 
 rivets.formatters.datetime = {
   read: function( value ) {
+    value = parseInt(value);
+    if(!value) return '';
     var date = (new Date(value * 1000));
     return date.getFullYear()
            + '-' + flen(date.getMonth() + 1)
