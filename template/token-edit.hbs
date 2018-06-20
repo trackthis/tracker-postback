@@ -4,7 +4,7 @@
 <dialog id="tokenDialog">
     <h2>Token</h2>
     <p>Please store the following API token somewhere secure.</p>
-    <p>This is the <b>only</b> time you will be able to see the token</p>
+    {{#unless __settings.token}}<p>This is the <b>only</b> time you will be able to see the token</p>{{/unless}}
     <pre>[[ token.token ]]</pre>
     <button rv-href="token.id | prepend '/tokens/' | append '?token={{__token}}'">OK</button>
 </dialog>
