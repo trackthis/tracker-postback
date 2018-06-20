@@ -6,9 +6,10 @@ var q      = require('../lib/query'),
     data   = q.decode(window.location.search||'');
 
 // Prepare rv data
+token.account        = token.account || data.account || '';
 rv.data.form.account = { isAdmin: false };
-rv.data.form.tokenid = token.id;
 rv.data.form.rules   = [];
+rv.data.token        = token;
 
 // Revert function for common savings
 function revert(orgs) {
@@ -148,8 +149,49 @@ rv.data.form.saverule = function( event, context ) {
   }, 10);
 };
 
-// Fetch API tokens
+rv.data.form.savetoken = function( event, context ) {
+  var btn = event.target;
+  while(btn.tagName!=='BUTTON') btn = btn.parentNode;
+
+  // Disable the button
+  var orgs = [{ el: btn, html: btn.innerHTML, dis: btn.disabled }];
+  btn.innerText = 'Saving...';
+  btn.disabled  = true;
+
+  // Allow button redraw
+  setTimeout(function () {
+
+    // Auth because a mapping contains a 'token' field
+    var postdata  = context.token;
+    postdata.auth = data.token;
+    if ( data.account ) postdata.account = data.account;
+
+    // Make the call
+    _.ajax({
+      'method' : 'POST',
+      'uri'    : '/api/v1/tokens',
+      'data'   : postdata
+    }, function(response) {
+      console.log(response);
+      revert(orgs);
+    });
+
+
+
+
+    console.log(postdata);
+    console.log(arguments);
+    console.log(context);
+  }, 10);
+};
+
+rv.data.form.deltoken = function( event, context ) {
+  console.log(arguments);
+};
+
+// Fetch token mappings
 (function() {
+  if (!token.id) return;
   var getdata     = { token: data.token, tokenid: token.id };
   if ( data.account ) getdata.account = data.account;
 
