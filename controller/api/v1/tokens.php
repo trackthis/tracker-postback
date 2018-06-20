@@ -53,11 +53,11 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
     $params            = $request->params();
     header("Content-Type: application/json");
 
-    // Only admins may create/update tokens
-    if (!$isAdmin) {
-        $_REQUEST['status'] = 403;
-        die('{"error":403,"description":"Permission denied"}');
-    }
+//    // Only admins may create/update tokens
+//    if (!$isAdmin) {
+//        $_REQUEST['status'] = 403;
+//        die('{"error":403,"description":"Permission denied"}');
+//    }
 
     /** @var \PicoDb\Database $odm */
     $odm = $_SERVICE['odm'];
@@ -90,14 +90,22 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
 
     // Writable fields
     $token['description'] = $request->param('description', isset($token['description'])?$token['description']:null);
-    $token['expires'    ] = $request->param('expires'    , isset($token['expires'    ])?$token['expires'    ]:0);
+
+    // Admin fields
+    if($isAdmin) {
+        $token['expires'] = $request->param('expires', isset($token['expires'])?$token['expires']:0);
+    }
 
     // Save the record
     if (isset($token['id'])) {
         $result = $odm->table('token')->eq('id',$token['id'])->update($token);
+        if (!$settings['token']) {
+            unset($token['token']);
+        }
     } else {
         $token['token'] = random_string(48);
         $result         = $odm->table('token')->insert($token);
+        $token['id']    = $odm->getLastId();
     }
 
     // Sorry, PicoDB has no way to extract errors
@@ -106,11 +114,11 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
         die('{"error":400,"description":"Bad request"}');
     }
 
-    // Add the ID to the output if needed
-    if (!isset($token['id'])) {
-        $token['id']    = $odm->getLastId();
-        $token['token'] = $odm->table('token')->eq('id',$token['id'])->findOneColumn('token');
-    }
+//    // Add the ID to the output if needed
+//    if (!isset($token['id'])) {
+//        $token['id']    = $odm->getLastId();
+//        $token['token'] = $odm->table('token')->eq('id',$token['id'])->findOneColumn('token');
+//    }
 
     // Return the token record
     die(json_encode($token));

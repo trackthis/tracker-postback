@@ -22,12 +22,12 @@
         {{/if}}
 
         <div class="form-input">
-            <input type="text" id="description" rv-value="token.description" />
+            <input type="text" id="description" required pattern=".{4,}" rv-value="token.description" title="Minimum length: 4 characters" />
             <label for="username">Description</label>
         </div>
 
-        <div class="form-input">
-            <input type="datetime-local" id="tokenExpires" rv-value="token.expires | datetime" />
+        <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}">
+            <input type="datetime-local" id="tokenExpires" rv-value="token.expires | datetime" {{#unless __settings.admin}}disabled{{/unless}} />
             <label for="username">Expires*</label>
         </div>
 
@@ -37,14 +37,16 @@
 
         <div class="form-actions">
             <button rv-on-click="form.savetoken" class="valign"><i class="material-icons">save</i><span>Save</span></button>
-            {{#if edit}}
-                <button class="valign show-modal"><i class="material-icons">delete</i><span>Delete</span></button>
-                <dialog>
-                    <h2>Delete this API token?</h2>
-                    <p>Deleting this API token prevents anyone from using this token ever again.</p>
-                    <button class="close">Cancel</button>
-                    <button rv-on-click="form.deltoken">Delete</button>
-                </dialog>
+            {{#if __settings.admin}}
+                {{#if edit}}
+                    <button class="valign show-modal"><i class="material-icons">delete</i><span>Delete</span></button>
+                    <dialog>
+                        <h2>Delete this API token?</h2>
+                        <p>Deleting this API token prevents anyone from using this token ever again.</p>
+                        <button class="close">Cancel</button>
+                        <button rv-on-click="form.deltoken">Delete</button>
+                    </dialog>
+                {{/if}}
             {{/if}}
         </div>
     </form>

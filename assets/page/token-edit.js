@@ -154,8 +154,11 @@ rv.data.form.saverule = function( event, context ) {
 };
 
 rv.data.form.savetoken = function( event, context ) {
-  var btn = event.target;
-  while(btn.tagName!=='BUTTON') btn = btn.parentNode;
+  var btn = this;
+  if(btn.tagName!=='BUTTON') return;
+  var frm = btn;
+  while(frm.tagName!=='FORM') frm = frm.parentNode;
+  if(!frm.reportValidity()) return;
 
   // Disable the button
   var orgs = [{ el: btn, html: btn.innerHTML, dis: btn.disabled }];
@@ -166,9 +169,15 @@ rv.data.form.savetoken = function( event, context ) {
   setTimeout(function () {
 
     // Auth because a mapping contains a 'token' field
-    var postdata  = context.token;
+    var postdata  = Object.assign({},context.token);
     postdata.auth = data.token;
     if ( data.account ) postdata.account = data.account;
+
+    // This allows us to update the description
+    if (!rv.data.form.account.isAdmin) {
+      delete postdata.expires;
+      delete postdata.username;
+    }
 
     // Make the call
     _.ajax({
@@ -179,9 +188,11 @@ rv.data.form.savetoken = function( event, context ) {
       if(response.status!==200) return revert(orgs);
       var dialog = _('#tokenDialog')[0];
       Object.assign(rv.data.token,response.data);
-      fancyDialog(dialog);
-      dialog.show();
       revert(orgs);
+      if ( response.data.token ) {
+        fancyDialog(dialog);
+        dialog.show();
+      }
     });
   }, 10);
 };
