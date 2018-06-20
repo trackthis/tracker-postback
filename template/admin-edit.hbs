@@ -7,7 +7,7 @@
         <h3>Username</h3>
 
         <div class="form-input disabled">
-            <input type="text" id="username" disabled rv-value="account.username" />
+            <input type="text" id="username" disabled rv-value="form.account.username" />
             <label for="username">Username</label>
         </div>
 
@@ -20,7 +20,7 @@
         <h3>Password update</h3>
 
         <div class="form-input">
-            <input type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" rv-value="account.password" />
+            <input type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" rv-value="form.account.password" />
             <label for="password">Password</label>
         </div>
 
@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-actions">
-            <button rv-on-click="account.passwordUpdate">Update</button>
+            <button rv-on-click="form.account.passwordUpdate">Update</button>
         </div>
     </form>
 
