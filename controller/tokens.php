@@ -11,10 +11,20 @@ $router->respond('/tokens',function () {
 $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
     global $_SERVICE;
     $isAdmin  = isset($_REQUEST['auth']['account']['settings']['admin']) ? $_REQUEST['auth']['account']['settings']['admin'] : false;
+    $params   = $request->params();
 
     // Verify 'account' param
     // Only admins may request any token
-    $username = $request->param('account', $_REQUEST['auth']['account']['username']);
+    if ( isset($params['account']) ) {
+        if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
+            $_REQUEST['status'] = 403;
+            die('{"error":403,"description":"Permission denied"}');
+        }
+        $username = $params['account'];
+    } else {
+        $username = $_REQUEST['auth']['account']['username'];
+    }
+
     if ( (!$isAdmin) && ($username !== $_REQUEST['auth']['account']['username']) ) {
         $_REQUEST['status'] = 302;
         header('Location: /tokens?token=' . $_GET['token']);
@@ -37,7 +47,7 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
     }
 
     // Make sure the (given) account owns the token
-    if ( $token['username'] !== $username ) {
+    if ( (!$isAdmin) && ($token['username'] !== $username) ) {
         $_REQUEST['status'] = 302;
         header('Location: ' . $fburl);
         exit(0);
