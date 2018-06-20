@@ -1,6 +1,14 @@
 {{>precontent}}
 {{>header this}}
 
+<dialog id="tokenDialog">
+    <h2>Token</h2>
+    <p>Please store the following API token somewhere secure.</p>
+    <p>This is the <b>only</b> time you will be able to see the token</p>
+    <pre>[[ token.token ]]</pre>
+    <button rv-href="token.id | prepend '/tokens/' | append '?token={{__token}}'">OK</button>
+</dialog>
+
 <div class="centered">
 
     <form class="content" onsubmit="return false;" id="tokenGeneric">

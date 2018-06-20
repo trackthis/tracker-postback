@@ -6,10 +6,11 @@ var q      = require('../lib/query'),
     data   = q.decode(window.location.search||'');
 
 // Prepare rv data
-token.account        = token.account || data.account || '';
-rv.data.form.account = { isAdmin: false };
-rv.data.form.rules   = [];
-rv.data.token        = token;
+token.account         = token.account || data.account || '';
+rv.data.form.account  = { isAdmin: false };
+rv.data.form.rules    = [];
+rv.data.token         = token;
+rv.data.token.account = rv.data.token.account || rv.data.token.username;
 
 // Revert function for common savings
 function revert(orgs) {
@@ -172,16 +173,13 @@ rv.data.form.savetoken = function( event, context ) {
       'uri'    : '/api/v1/tokens',
       'data'   : postdata
     }, function(response) {
-      console.log(response);
+      if(response.status!==200) return revert(orgs);
+      var dialog = _('#tokenDialog')[0];
+      Object.assign(rv.data.token,response.data);
+      fancyDialog(dialog);
+      dialog.show();
       revert(orgs);
     });
-
-
-
-
-    console.log(postdata);
-    console.log(arguments);
-    console.log(context);
   }, 10);
 };
 
