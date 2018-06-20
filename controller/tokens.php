@@ -50,7 +50,7 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
 
     // Return the page
     die($_SERVICE['template']('token-edit', array(
-        'title' => 'Edit token: ' . isset($token['token'])?$token['token']:$token['description'],
+        'title' => 'Edit token: ' . (isset($token['token'])?$token['token']:$token['description']),
         'edit'  => true,
         'token' => $token,
     )));
