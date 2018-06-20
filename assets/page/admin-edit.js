@@ -72,8 +72,6 @@ rv.data.form.account.passwordUpdate = function( event, context ) {
   btn.innerText = 'Generating key pair...';
   btn.disabled  = true;
 
-  console.log(frm);
-
   // Allow button redraw
   setTimeout(function() {
 
@@ -96,7 +94,7 @@ rv.data.form.account.passwordUpdate = function( event, context ) {
         username : rv.data.form.account.username,
         pubkey   : kp.getPublic('hex')
       };
-      
+
       // Submit what we just did
       _.ajax({
         method : 'POST',
