@@ -159,19 +159,19 @@ $router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $re
         $_REQUEST['status'] = 404;
         die('{"error":404,"description":"Not found"}');
     }
-    if ($username !== $token['username']) {
+    if ( (!$isAdmin) && ($username !== $token['username']) ) {
         $_REQUEST['status'] = 403;
         die('{"error":403,"description":"Permission denied"}');
     }
 
     // Delete it's mappings
-    $result = $odm->table('mapping')->eq('token',$token['id'])->remove();
+    $odm->table('mapping')->eq('token',$token['id'])->remove();
 
-    // Sorry, PicoDB has no way to extract errors
-    if(!$result) {
-        $_REQUEST['status'] = 400;
-        die('{"error":400,"description":"Bad request"}');
-    }
+//    // Sorry, PicoDB has no way to extract errors
+//    if(!$result) {
+//        $_REQUEST['status'] = 400;
+//        die('{"error":400,"description":"Bad request"}');
+//    }
 
     // Being here means we're allowed to delete the token
     die(json_encode($odm->table('token')->eq('id', $token['id'])->remove()));
