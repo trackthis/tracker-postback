@@ -46,10 +46,14 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     global $_SERVICE;
     $settings          = $_REQUEST['auth']['account']['settings'];
     $settings['admin'] = isset($settings['admin']) ? $settings['admin'] : false;
-    $settings['token'] = isset($settings['token']) ? $settings['token'] : false;
-    $isAdmin           = isset($settings['admin']) ? $settings['admin'] : false;
+    $settings['token'] = $settings['admin'] ? true : (isset($settings['token']) ? $settings['token'] : false);
+    $isAdmin           = $settings['admin'];
     $username          = false;
     header("Content-Type: application/json");
+
+    file_put_contents('php://stderr',json_encode(array(
+        'settings' => $settings
+    )),FILE_APPEND);
 
     // Only admins may create/update mappings
     if (!$isAdmin) {
