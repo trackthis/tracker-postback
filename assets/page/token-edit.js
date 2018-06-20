@@ -56,7 +56,7 @@ rv.data.form.addrule = function( event, context ) {
   setTimeout(function() {
 
     // Auth because a mapping contains a 'token' field
-    var postdata = {auth:data.token,token:context.form.tokenid};
+    var postdata = {auth:data.token,token:token.id};
     if ( data.account ) postdata.account = data.account;
 
     // Make the call
@@ -117,7 +117,35 @@ rv.data.form.delrule = function( event, context ) {
   return false;
 };
 rv.data.form.saverule = function( event, context ) {
-  console.log(context.rule);
+  var btn = event.target;
+  while(btn.tagName!=='BUTTON') btn = btn.parentNode;
+
+  // Disable the button
+  var orgs = [{ el: btn, dis: btn.disabled }];
+  btn.disabled  = true;
+
+  // Allow button redraw
+  setTimeout(function () {
+
+    // Auth because a mapping contains a 'token' field
+    var postdata   = context.rule;
+    postdata.auth  = data.token;
+    postdata.token = token.id;
+    if ( data.account ) postdata.account = data.account;
+
+    // Make the call
+    _.ajax({
+      'method': 'POST',
+      'uri'   : '/api/v1/mappings',
+      'data'  : postdata
+    }, function(response) {
+      if(response.status!==200) {
+        // TODO: revert fields
+        return revert(orgs);
+      }
+      revert(orgs);
+    });
+  }, 10);
 };
 
 // Fetch API tokens
