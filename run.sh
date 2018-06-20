@@ -6,11 +6,6 @@ rm fifo.* 2>/dev/null
 test -n "$PORT" || PORT=5000
 XRARGS="-f -x -s http:0.0.0.0:$PORT"
 
-# Heroku environment
-if [ -d "vendor/bin/heroku-php-apache2" ]; then
-  exec vendor/bin/heroku-php-apache2 web/
-fi
-
 if [ -f tcpd.c ] && command -v tcc &>/dev/null; then # "nc -e", run live
   tcc -run tcpd.c $PORT php web/index.php
 elif [ -f tcpd.c ] && command -v gcc &>/dev/null; then # "nc -e", compile first
