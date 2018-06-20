@@ -8,18 +8,18 @@
 
         {{#if __settings.admin}}
             <div class="form-input">
-                <input type="text" id="username" {{#if edit}}value="{{token.username}}"{{/if}}{{#if new}}value="{{GET.account}}"{{/if}} />
+                <input type="text" id="username" rv-value="token.account" {{#if edit}}disabled{{/if}} />
                 <label for="username">Username</label>
             </div>
         {{/if}}
 
         <div class="form-input">
-            <input type="text" id="description" {{#if edit}}value="{{token.description}}"{{/if}} />
+            <input type="text" id="description" rv-value="token.description" />
             <label for="username">Description</label>
         </div>
 
         <div class="form-input">
-            <input type="datetime-local" id="tokenExpires"/>
+            <input type="datetime-local" id="tokenExpires" rv-value="token.expires | datetime" />
             <label for="username">Expires*</label>
         </div>
 
@@ -28,14 +28,16 @@
         </small>
 
         <div class="form-actions">
-            <button class="valign"><i class="material-icons">save</i><span>Save</span></button>
-            <button class="valign show-modal"><i class="material-icons">delete</i><span>Delete</span></button>
-            <dialog>
-                <h2>Delete this API token?</h2>
-                <p>Deleting this API token prevents anyone from using this token ever again.</p>
-                <button class="close">Cancel</button>
-                <button>Delete</button>
-            </dialog>
+            <button rv-on-click="form.savetoken" class="valign"><i class="material-icons">save</i><span>Save</span></button>
+            {{#if edit}}
+                <button class="valign show-modal"><i class="material-icons">delete</i><span>Delete</span></button>
+                <dialog>
+                    <h2>Delete this API token?</h2>
+                    <p>Deleting this API token prevents anyone from using this token ever again.</p>
+                    <button class="close">Cancel</button>
+                    <button rv-on-click="form.deltoken">Delete</button>
+                </dialog>
+            {{/if}}
         </div>
     </form>
 
@@ -88,6 +90,5 @@
     </div>
 {{/if}}
 
-<script>var token={{{json token}}};</script>
-{{#if edit}}{{#if token.expires}}<script>tokenExpires.valueAsNumber = Math.floor({{token.expires}}/60)*60000;</script>{{/if}}{{/if}}
+<script>var token={{{json token}}}||{};</script>
 {{>postcontent}}
