@@ -157,5 +157,5 @@ if(is_file(__DIR__ . DS . 'src' . DS . 'app.php')) {
 }
 
 // Too bad
-$status = 404;
+http_response_code(404);
 die('We could not find the page you\'re looking for.'.PHP_EOL);
