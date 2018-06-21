@@ -51,9 +51,10 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     $username          = false;
     header("Content-Type: application/json");
 
-    file_put_contents('php://stderr',json_encode(array(
-        'settings' => $settings
-    )).PHP_EOL,FILE_APPEND);
+    breakpoint('post-map-settings'      , $settings);
+    breakpoint('post-map-settings-admin', $settings);
+    breakpoint('post-map-settings-token', $settings);
+    breakpoint('post-map-isadmin'       , $settings);
 
     // Only admins may create/update mappings
     if (!$isAdmin) {
@@ -61,12 +62,17 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
         die('{"error":403,"description":"Permission denied"}');
     }
 
+    breakpoint('post-map-after-isadmin', 'I\'m alive!');
+
     /** @var \PicoDb\Database $odm */
     $odm = $_SERVICE['odm'];
+
+    breakpoint('post-map-after-odmload', 'I\'m alive!');
 
     // Fetch username to use
     // TODO: Make this code generic (it's used often)
     $params = $request->params();
+    breakpoint('post-map-params', $params);
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
             http_response_code(403);
@@ -77,11 +83,16 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
         $username = $_REQUEST['auth']['account']['username'];
     }
 
+    breakpoint('post-map-username', $username);
+
     // Fetch the token (something about ownership)
     $query = $odm->table('token');
     if($username) $query = $query->eq('username', $username);
     if(intval($request->param('token',false))) $query = $query->eq('id', intval($request->param('token')));
     $token = $query->findOne();
+
+    breakpoint('post-map-token', $token);
+
     if(is_null($token)) {
         http_response_code(404);
         die('{"error":404,"description":"Not found"}');
@@ -89,8 +100,10 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
 
     // Build initial data
     $mapping = array( 'token' => $token['id'] );
+    breakpoint('post-map-baremap', $token);
     if (intval($request->param('id',false))) {
         $mapping = $odm->table('mapping')->eq('id',$request->param('id'))->findOne();
+        breakpoint('post-map-dbmap', $mapping);
         if (is_null($mapping)) {
             http_response_code(404);
             die('{"error":404,"description":"Not found"}');
@@ -105,6 +118,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     $mapping['remote']    = $request->param('remote'   , isset($mapping['remote'   ])?$mapping['remote'   ]:null);
     $mapping['tracker']   = $request->param('tracker'  , isset($mapping['tracker'  ])?$mapping['tracker'  ]:null);
     $mapping['translate'] = $request->param('translate', isset($mapping['translate'])?$mapping['translate']:null);
+    breakpoint('post-map-writemap', $mapping);
 
     // Save the record
     if (isset($mapping['id'])) {
@@ -112,6 +126,9 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     } else {
         $result = $odm->table('mapping')->insert($mapping);
     }
+
+    breakpoint('post-map-result', $result);
+
 
     // Sorry, PicoDB has no way to extract errors
     if(!$result) {
@@ -123,6 +140,8 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     $mapping['id'] = isset($mapping['id']) ? $mapping['id'] : $odm->getLastId();
 
     // Return the mapping record
+
+    breakpoint('post-map-output', $mapping);
     die(json_encode($mapping));
 });
 

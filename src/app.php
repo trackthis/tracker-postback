@@ -16,9 +16,42 @@ if (!defined('APPROOT')) {
     define('APPROOT', rtrim(dirname(__DIR__), DS));
 }
 
-// Handle pre-forked start
+// Catch pre-forked start
 if (isset($_SERVER['argc'])) {
     require(APPROOT . DS . 'init.php');
+}
+
+// DEBUG function
+// outputs yaml-like structure
+if(!function_exists('prnt')) {
+    function prnt( $data, $ret = false, $prefix = '' ) {
+        $output = '';
+        foreach ( $data as $key => $value ) {
+            $output .= $prefix . $key . ':';
+            switch(gettype($value)) {
+                case 'boolean':
+                    $output .= ' ' . ($value?'true':'false') . PHP_EOL;
+                    break;
+                case 'string':
+                case 'integer':
+                case 'number':
+                case 'float':
+                case 'double':
+                    $output .= ' ' . $value . PHP_EOL;
+                    break;
+                case 'array':
+                    $output .= PHP_EOL;
+                    $output .= prnt( $value, true, $prefix.'  ');
+                    break;
+            }
+        }
+        if ($ret) {
+            return $output;
+        } else {
+            echo $output;
+            return null;
+        }
+    }
 }
 
 if(!function_exists('random_character')) {
@@ -30,6 +63,16 @@ if(!function_exists('random_character')) {
 if(!function_exists('random_string')) {
     function random_string( $length = 8, $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
         return implode(array_map('random_character',array_fill(0,$length,$alphabet)));
+    }
+}
+
+if (!function_exists('breakpoint')) {
+    function breakpoint( $key, $dumpval ) {
+        $params = array_merge($_GET,$_POST);
+        if( isset($params['break']) && $params['break'] == $key ) {
+            var_dump($dumpval);
+            die();
+        }
     }
 }
 
