@@ -68,6 +68,7 @@ if(!function_exists('random_string')) {
 
 if (!function_exists('breakpoint')) {
     function breakpoint( $key, $dumpval ) {
+        // TODO: only in DEV mode
         $params = array_merge($_GET,$_POST);
         if( isset($params['break']) && $params['break'] == $key ) {
             header('Content-Type: text/plain');
