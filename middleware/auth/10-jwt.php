@@ -4,9 +4,6 @@
 $router->respond(function () {
     global $_SERVICE;
     $_REQUEST['auth'] = false;
-    breakpoint('jwt-request', $_REQUEST);
-    breakpoint('jwt-get', $_GET);
-    breakpoint('jwt-post', $_POST);
 
     function url2b64($data) {
         if ($remainder = strlen($data) % 4) {
@@ -25,7 +22,6 @@ $router->respond(function () {
     $raw = isset($_POST['token']) ? $_POST['token'] : $raw;
     $raw = isset($_POST['auth'])  ? $_POST['auth']  : $raw;
     $raw = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : $raw;
-    breakpoint('jwt-raw', $raw);
     if ($raw === false) {
         return;
     }
@@ -37,7 +33,6 @@ $router->respond(function () {
             $raw = substr($raw, strlen($prefix));
         }
     }
-    breakpoint('jwt-trimmed', $raw);
 
     // Split into parts
     $parts = explode('.',$raw);
@@ -49,10 +44,6 @@ $router->respond(function () {
     $payload   = json_decode(b64urldecode($payload),true);
     $signature = bin2hex(b64urldecode(array_shift($parts)));
 
-    breakpoint('jwt-header', $header);
-    breakpoint('jwt-payload', $payload);
-    breakpoint('jwt-signature', $signature);
-
     // Verify header
     if ((isset($header['typ'])?$header['typ']:false) !== 'JWT') return;
     if ((isset($header['alg'])?$header['alg']:false) !== 'ES256') return;
@@ -62,28 +53,20 @@ $router->respond(function () {
     $username = isset($payload['usr']) ? $payload['usr'] : false;
     if(gettype($username) !== 'string') return;
 
-
-    breakpoint('jwt-username', $username);
-
     // Fetch the user from DB
     /** @var \PicoDb\Database $odm */
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $username)->findOne();
-    breakpoint('jwt-account', $account);
     if (is_null($account)) return;
 
     // Build hash
     $hash = hash('sha256', $data);
-    breakpoint('jwt-data', $data);
-    breakpoint('jwt-hash', $hash);
 
     // Verify the signature
     $pubkey = $account['pubkey'];
-    breakpoint('jwt-pubkey', $pubkey);
     $result = array();
     exec('node '.APPROOT."/src/sigcheck.js  ${hash} ${pubkey} ${signature}",$result);
     $valid = json_decode(array_shift($result));
-    breakpoint('jwt-valid', $pubkey);
     if (!$valid) {
         return;
     }

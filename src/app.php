@@ -75,9 +75,11 @@ if (!function_exists('breakpoint')) {
             die();
         }
     }
+
+//    // Example, pass break=INIT_REQUEST into the get params to dump $_REQUEST
+//    breakpoint('INIT_REQUEST',$_REQUEST);
 }
 
-breakpoint('INIT_REQUEST',$_REQUEST);
 
 // Initialize service handler
 $_SERVICE = new Pimple\Container();
