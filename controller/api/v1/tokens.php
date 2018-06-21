@@ -19,7 +19,7 @@ $router->respond('GET', '/api/v1/tokens', function ( \Klein\Request $request ) {
     // Add username filter if needed
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $query = $query->eq('username', $params['account']);
@@ -55,7 +55,7 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
 
 //    // Only admins may create/update tokens
 //    if (!$isAdmin) {
-//        $_REQUEST['status'] = 403;
+//        http_response_code(403);
 //        die('{"error":403,"description":"Permission denied"}');
 //    }
 
@@ -66,7 +66,7 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
     // TODO: Make this code generic (it's used often)
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
@@ -79,11 +79,11 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
     if (intval($request->param('id',false))) {
         $token = $odm->table('token')->eq('id',$request->param('id'))->findOne();
         if (is_null($token)) {
-            $_REQUEST['status'] = 404;
+            http_response_code(404);
             die('{"error":404,"description":"Not found"}');
         }
         if ($username !== $token['username']) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
     }
@@ -110,7 +110,7 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
 
     // Sorry, PicoDB has no way to extract errors
     if(!$result) {
-        $_REQUEST['status'] = 400;
+        http_response_code(400);
         die('{"error":400,"description":"Bad request"}');
     }
 
@@ -136,7 +136,7 @@ $router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $re
 
     // Only admins may delete tokens
     if (!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -147,7 +147,7 @@ $router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $re
     // TODO: Make this code generic (it's used often)
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
@@ -157,18 +157,18 @@ $router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $re
 
     // Verify ID param
     if (!intval($request->param('id',false))) {
-        $_REQUEST['status'] = 400;
+        http_response_code(400);
         die('{"error":400,"description":"Bad request"}');
     }
 
     // Fetch token
     $token = $odm->table('token')->eq('id', $request->param('id'))->findOne();
     if (is_null($token)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"Not found"}');
     }
     if ( (!$isAdmin) && ($username !== $token['username']) ) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -177,7 +177,7 @@ $router->respond('DELETE', '/api/v1/tokens/[i:id]', function( \Klein\Request $re
 
 //    // Sorry, PicoDB has no way to extract errors
 //    if(!$result) {
-//        $_REQUEST['status'] = 400;
+//        http_response_code(400);
 //        die('{"error":400,"description":"Bad request"}');
 //    }
 

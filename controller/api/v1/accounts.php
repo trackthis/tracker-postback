@@ -8,7 +8,7 @@ $router->respond('GET', '/api/v1/accounts', function () {
     header("Content-Type: application/json");
 
     if (!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -29,7 +29,7 @@ $router->respond('GET', '/api/v1/accounts/[:username]', function ($request) {
 
     // Only admins may fetch anyone
     if (!($fetchSelf || $isAdmin)) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -37,7 +37,7 @@ $router->respond('GET', '/api/v1/accounts/[:username]', function ($request) {
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $request->param('username'))->findOne();
     if (is_null($account)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"The requested entity could not be found"}');
     }
 
@@ -54,13 +54,13 @@ $router->respond('POST', '/api/v1/accounts', function( \Klein\Request $request )
 
     // Only admins are allowed to create/update users
     if (!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
     // Validate given username
     if(!preg_match("/^[ a-zA-Z0-9\\-_]{3,}\$/", $params['username'])) {
-        $_REQUEST['status'] = 422;
+        http_response_code(422);
         die(json_encode(array(
             "error"       => 422,
             "description" => "The username did not meet the requirements: /^[ a-zA-Z0-9\\-_]{3,}\$/"
@@ -100,7 +100,7 @@ $router->respond('DELETE', '/api/v1/accounts/[:username]', function ($request) {
 
     // Only admins may delete anyone
     if (!($fetchSelf || $isAdmin)) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -109,7 +109,7 @@ $router->respond('DELETE', '/api/v1/accounts/[:username]', function ($request) {
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $request->param('username'))->findOne();
     if (is_null($account)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"The requested entity could not be found"}');
     }
 

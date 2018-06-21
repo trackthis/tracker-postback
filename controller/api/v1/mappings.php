@@ -19,7 +19,7 @@ $router->respond('GET', '/api/v1/mappings', function ( \Klein\Request $request )
     // Add username filter if needed
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $query = $query->eq('username', $params['account']);
@@ -30,7 +30,7 @@ $router->respond('GET', '/api/v1/mappings', function ( \Klein\Request $request )
     // Fetch the token
     $token = $query->findOne();
     if(is_null($token)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"Not found"}');
     }
 
@@ -53,11 +53,11 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
 
     file_put_contents('php://stderr',json_encode(array(
         'settings' => $settings
-    )),FILE_APPEND);
+    )).PHP_EOL,FILE_APPEND);
 
     // Only admins may create/update mappings
     if (!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -69,7 +69,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     $params = $request->params();
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
@@ -83,7 +83,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     if(intval($request->param('token',false))) $query = $query->eq('id', intval($request->param('token')));
     $token = $query->findOne();
     if(is_null($token)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"Not found"}');
     }
 
@@ -92,11 +92,11 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     if (intval($request->param('id',false))) {
         $mapping = $odm->table('mapping')->eq('id',$request->param('id'))->findOne();
         if (is_null($mapping)) {
-            $_REQUEST['status'] = 404;
+            http_response_code(404);
             die('{"error":404,"description":"Not found"}');
         }
         if (intval($mapping['token'])!==intval($token['id'])) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
     }
@@ -115,7 +115,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
 
     // Sorry, PicoDB has no way to extract errors
     if(!$result) {
-        $_REQUEST['status'] = 400;
+        http_response_code(400);
         die('{"error":400,"description":"Bad request"}');
     }
 
@@ -138,7 +138,7 @@ $router->respond('DELETE', '/api/v1/mappings/[i:id]', function ( \Klein\Request 
 
     // Only admins may delete mappings
     if (!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die('{"error":403,"description":"Permission denied"}');
     }
 
@@ -148,7 +148,7 @@ $router->respond('DELETE', '/api/v1/mappings/[i:id]', function ( \Klein\Request 
     // Fetch mapping
     $mapping = $odm->table('mapping')->eq('id', $request->param('id', 0))->findOne();
     if (is_null($mapping)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"Not found"}');
     }
 
@@ -159,7 +159,7 @@ $router->respond('DELETE', '/api/v1/mappings/[i:id]', function ( \Klein\Request 
     // For if someone later decides non-admins are allowed to do this
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $query = $query->eq('username', $params['account']);
@@ -170,7 +170,7 @@ $router->respond('DELETE', '/api/v1/mappings/[i:id]', function ( \Klein\Request 
     // Fetch the token
     $token = $query->findOne();
     if(is_null($token)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die('{"error":404,"description":"Not found"}');
     }
 

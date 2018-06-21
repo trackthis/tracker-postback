@@ -11,7 +11,7 @@ $router->respond('/tokens',function ( \Klein\Request $request ) {
     // TODO: Make this code generic (it's used often)
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
@@ -35,7 +35,7 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
     // Only admins may request any token
     if ( isset($params['account']) ) {
         if ( ($params['account']!==$_REQUEST['auth']['account']['username']) && (!$isAdmin) ) {
-            $_REQUEST['status'] = 403;
+            http_response_code(403);
             die('{"error":403,"description":"Permission denied"}');
         }
         $username = $params['account'];
@@ -44,7 +44,7 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
     }
 
     if ( (!$isAdmin) && ($username !== $_REQUEST['auth']['account']['username']) ) {
-        $_REQUEST['status'] = 302;
+        http_response_code(302);
         header('Location: /tokens?token=' . $_GET['token']);
         exit(0);
     }
@@ -59,14 +59,14 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
     $odm   = $_SERVICE['odm'];
     $token = $odm->table('token')->eq('id', $request->param('id', 0 ))->findOne();
     if (is_null($token)) {
-        $_REQUEST['status'] = 302;
+        http_response_code(302);
         header('Location: ' . $fburl);
         exit(0);
     }
 
     // Make sure the (given) account owns the token
     if ( (!$isAdmin) && ($token['username'] !== $username) ) {
-        $_REQUEST['status'] = 302;
+        http_response_code(302);
         header('Location: ' . $fburl);
         exit(0);
     }

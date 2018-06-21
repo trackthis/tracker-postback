@@ -8,7 +8,7 @@ $router->respond('GET', '/admin',function () {
 
     // Only admins are allowed on this page
     if(!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die($_SERVICE['template']('denied'));
     }
 
@@ -23,13 +23,13 @@ $router->respond('GET', '/admin/[:username]', function( $request ) {
 
     // Only admins are allowed on this page
     if(!$isAdmin) {
-        $_REQUEST['status'] = 403;
+        http_response_code(403);
         die($_SERVICE['template']('denied'));
     }
 
     // Username verification
     if( (!$username) || (!preg_match("/^[ a-zA-Z0-9\\-_]{3,}\$/", $username)) ) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die($_SERVICE['template']('account-not-found', array(
             'username' => $username
         )));
@@ -40,7 +40,7 @@ $router->respond('GET', '/admin/[:username]', function( $request ) {
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $username)->findOne();
     if (is_null($account)) {
-        $_REQUEST['status'] = 404;
+        http_response_code(404);
         die($_SERVICE['template']('account-not-found', array(
             'username' => $username
         )));

@@ -29,11 +29,11 @@ $mimeTypes = array(
     'html' => 'text/html',
     'js'   => 'text/javascript',
 );
-$_REQUEST['status']  = 200;
+http_response_code(200);
 $_REQUEST['headers'] = array();
 ob_start(function( $buffer ) {
     global $statusCodes;
-    $extra  = 'HTTP/1.0 '.$_REQUEST['status'].' '.$statusCodes[$_REQUEST['status']].PHP_EOL;
+    $extra  = 'HTTP/1.0 '.http_response_code().' '.$statusCodes[http_response_code()].PHP_EOL;
     $extra .= 'Content-Length: '.strlen($buffer) . PHP_EOL;
     foreach ($_REQUEST['headers'] as $header) $extra .= $header . PHP_EOL;
     $nativeHeaders = php_sapi_name() === 'cli' ? xdebug_get_headers() : headers_list();
@@ -44,7 +44,7 @@ ob_start(function( $buffer ) {
 
 // Make sure we support this
 if(!in_array($_SERVER['REQUEST_METHOD'],array('GET','POST','DELETE'))) {
-    $_REQUEST['status'] = 501;
+    http_response_code(501);
     header('Content-Type: application/json');
     die('{"error":501,"description":"The requested method has not (yet) been implemented"}');
 }
@@ -97,7 +97,7 @@ if (isset($_SERVER['HTTP_CONTENT_LENGTH'])) {
         switch($_SERVER['HTTP_CONTENT_TYPE']) {
             case 'application/json': $_POST = json_decode($_REQUEST['body'], true); break;
             default:
-                $_REQUEST['status'] = 400;
+                http_response_code(400);
                 die('{"error":400,"description":"Invalid request - unsupported body content type"}');
         }
     }
