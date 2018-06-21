@@ -3,6 +3,7 @@
 /** @var \Klein\Klein $router */
 $router->respond(function () {
 
+    var_dump($_SERVER);
     die('dinges?');
 
     // We need JSON & a broken $_POST for this middleware
