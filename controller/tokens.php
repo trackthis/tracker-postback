@@ -19,7 +19,7 @@ $router->respond('/tokens',function ( \Klein\Request $request ) {
         $username = $_REQUEST['auth']['account']['username'];
     }
 
-
+    header('Content-Type: text/html');
     die($_SERVICE['template']('token-overview', array(
         "username" => $username,
         "me"       => ($username===$_REQUEST['auth']['account']['username'])
@@ -77,6 +77,7 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
     }
 
     // Return the page
+    header('Content-Type: text/html');
     die($_SERVICE['template']('token-edit', array(
         'title' => 'Edit token: ' . (isset($token['token'])?$token['token']:'[[token.description]]'),
         'edit'  => true,
@@ -87,6 +88,7 @@ $router->respond('GET', '/tokens/[i:id]', function( \Klein\Request $request ) {
 $router->respond('GET', '/tokens/new', function() {
     global $_SERVICE;
 
+    header('Content-Type: text/html');
     die($_SERVICE['template']('token-edit', array(
         'title' => 'New token',
         'new'   => true,
