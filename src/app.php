@@ -117,9 +117,16 @@ foreach (array_merge(
 }
 
 // 404 handler
-$router->respond(function() {
+/** @var \Klein\Klein $router */
+$router->respond(function( \Klein\Request $request ) {
     global $_SERVICE;
+    $apiPaths = ['/api'];
     http_response_code(404);
+    foreach ( $apiPaths as $path ) {
+        if ( substr($request->pathname(),0,strlen($path)) == $path ) {
+            die('{"error":404,"description":"Not found"}');
+        }
+    }
     return $_SERVICE['template']('404');
 });
 
