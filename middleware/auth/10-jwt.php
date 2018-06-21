@@ -81,6 +81,9 @@ $router->respond(function () {
     $_REQUEST['auth'] = array(
         'account' => $account,
         'method'  => 'JWT',
-        'token'   => $raw,
+        'token'   => array(
+            'header'  => $header,
+            'payload' => $payload
+        ),
     );
 });
