@@ -76,6 +76,8 @@ if (!function_exists('breakpoint')) {
     }
 }
 
+breakpoint('INIT_REQUEST',$_REQUEST);
+
 // Initialize service handler
 $_SERVICE = new Pimple\Container();
 

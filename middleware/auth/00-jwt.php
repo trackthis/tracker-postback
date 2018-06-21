@@ -22,6 +22,7 @@ $router->respond(function () {
     $raw = isset($_POST['token']) ? $_POST['token'] : $raw;
     $raw = isset($_POST['auth'])  ? $_POST['auth']  : $raw;
     $raw = isset($_SERVER['HTTP_AUTHORIZATION']) ? $_SERVER['HTTP_AUTHORIZATION'] : $raw;
+    breakpoint('jwt-raw', $raw);
     if ($raw === false) {
         return;
     }
@@ -33,6 +34,7 @@ $router->respond(function () {
             $raw = substr($raw, strlen($prefix));
         }
     }
+    breakpoint('jwt-trimmed', $raw);
 
     // Split into parts
     $parts = explode('.',$raw);
@@ -43,6 +45,10 @@ $router->respond(function () {
     $header    = json_decode(b64urldecode($header),true);
     $payload   = json_decode(b64urldecode($payload),true);
     $signature = bin2hex(b64urldecode(array_shift($parts)));
+
+    breakpoint('jwt-header', $header);
+    breakpoint('jwt-payload', $payload);
+    breakpoint('jwt-signature', $signature);
 
     // Verify header
     if ((isset($header['typ'])?$header['typ']:false) !== 'JWT') return;
