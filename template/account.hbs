@@ -1,0 +1,33 @@
+{{>precontent}}
+{{>header this}}
+
+<main class="centered">
+
+    <div class="content">
+        <h2>Your account</h2>
+        <p>Username: {{account.username}}</p>
+        <button rv-on-click="account.logout">Log out</button>
+    </div>
+
+    <form class="content" onsubmit="return false;" id="updatePassword">
+        <h2>Password update</h2>
+
+        <div class="form-input">
+            <input type="password" id="password" pattern=".{8,}" required title="Minimum of 8 characters" oninput="inputmatch(this,'password-repeat');" rv-value="account.password" />
+            <label for="password">Password</label>
+        </div>
+
+        <div class="form-input">
+            <input type="password" id="password-repeat" pattern=".{8,}" required title="Must match the above password" />
+            <label for="password-repeat">Repeat password</label>
+        </div>
+
+        <div class="form-actions">
+            <button rv-on-click="account.passwordUpdate">Update</button>
+        </div>
+    </form>
+
+</main>
+
+<script>var account={{{json account}}};</script>
+{{>postcontent}}
