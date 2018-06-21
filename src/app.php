@@ -116,5 +116,12 @@ foreach (array_merge(
     require_once($filename);
 }
 
+// 404 handler
+$router->respond(function() {
+    global $_SERVICE;
+    http_response_code(404);
+    return $_SERVICE['template']('404');
+});
+
 // Kickoff the request
 $GLOBALS['router']->dispatch();
