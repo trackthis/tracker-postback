@@ -1,7 +1,7 @@
 <?php
 
-/** @var \Klein\Klein $router */
-$router->respond(function () {
+// Run BEFORE dispatching the router
+call_user_func(function () {
 
     // Fetch content type
     $contentType = false;
