@@ -12,8 +12,10 @@ $router->respond(function () {
     if ( $contentType !== 'application/json' ) return;
     if ( count($_POST) > 0 ) return;
 
-    // Fetch body
-    $body = file_get_contents('php://input');
-    var_dump($body);
-
+    // Parse body
+    try {
+        $_POST = json_decode(file_get_contents('php://input'),true);
+    } catch( Exception $e ) {
+        $_POST = array();
+    }
 });
