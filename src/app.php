@@ -70,6 +70,7 @@ if (!function_exists('breakpoint')) {
     function breakpoint( $key, $dumpval ) {
         $params = array_merge($_GET,$_POST);
         if( isset($params['break']) && $params['break'] == $key ) {
+            header('Content-Type: text/plain');
             var_dump($dumpval);
             die();
         }
