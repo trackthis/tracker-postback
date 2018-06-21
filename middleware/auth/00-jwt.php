@@ -3,6 +3,7 @@
 /** @var \Klein\Klein $router */
 $router->respond(function () {
     global $_SERVICE;
+    breakpoint('jwt-request', $_REQUEST);
     $_REQUEST['auth'] = false;
 
     function url2b64($data) {
