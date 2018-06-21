@@ -53,10 +53,9 @@ _('#loginform').each(function(el) {
           signature = Buffer.from(kp.sign(sha256(unsigned).toString('hex')).toDER('hex'),'hex'),
           signed    = unsigned + '.' + base64url.fromBase64(signature.toString('base64'));
 
-      // Revert all buttons
+      // Change button text
       orgs.forEach(function(record) {
-        record.el.disabled  = record.dis;
-        record.el.innerHTML = record.html;
+        record.el.innerText = 'Attempting login...'
       });
 
       // Dump public key to console
