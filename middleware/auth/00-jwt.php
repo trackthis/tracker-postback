@@ -60,17 +60,24 @@ $router->respond(function () {
     $username = isset($payload['usr']) ? $payload['usr'] : false;
     if(gettype($username) !== 'string') return;
 
+
+    breakpoint('jwt-username', $username);
+
     // Fetch the user from DB
     /** @var \PicoDb\Database $odm */
     $odm     = $_SERVICE['odm'];
     $account = $odm->table('account')->eq('username', $username)->findOne();
+    breakpoint('jwt-account', $account);
     if (is_null($account)) return;
 
     // Build hash
     $hash = hash('sha256', $data);
+    breakpoint('jwt-data', $data);
+    breakpoint('jwt-hash', $hash);
 
     // Verify the signature
     $pubkey = $account['pubkey'];
+    breakpoint('jwt-pubkey', $pubkey);
     $result = array();
     exec('node '.APPROOT."/src/sigcheck.js  ${hash} ${pubkey} ${signature}",$result);
     $valid = json_decode(array_shift($result));
