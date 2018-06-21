@@ -8,5 +8,5 @@ Postback handler for the trackthis tracker
 Starting the project can be done by the following one-liner:
 
 ```sh
-composer install ; npm install ; node build ; ./run.sh
+composer install ; npm install ; ./run.sh
 ```
