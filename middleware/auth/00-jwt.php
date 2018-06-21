@@ -3,8 +3,10 @@
 /** @var \Klein\Klein $router */
 $router->respond(function () {
     global $_SERVICE;
-    breakpoint('jwt-request', $_REQUEST);
     $_REQUEST['auth'] = false;
+    breakpoint('jwt-request', $_REQUEST);
+    breakpoint('jwt-get', $_GET);
+    breakpoint('jwt-post', $_POST);
 
     function url2b64($data) {
         if ($remainder = strlen($data) % 4) {
@@ -81,6 +83,7 @@ $router->respond(function () {
     $result = array();
     exec('node '.APPROOT."/src/sigcheck.js  ${hash} ${pubkey} ${signature}",$result);
     $valid = json_decode(array_shift($result));
+    breakpoint('jwt-valid', $pubkey);
     if (!$valid) {
         return;
     }
