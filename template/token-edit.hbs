@@ -78,13 +78,13 @@
             <form class="form-horizontal" rv-each-rule="form.rules">
 
                 <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}" >
-                    <input type="text" rv-id="%rule% | prepend 'tracker[' | append ']'" rv-value="rule.tracker" {{#unless __settings.admin}}disabled{{/unless}} />
-                    <label rv-for="%rule% | prepend 'tracker[' | append ']'">Tracker</label>
+                    <input type="text" rv-id="%rule% | prepend 'source[' | append ']'" rv-value="rule.source" {{#unless __settings.admin}}disabled{{/unless}} />
+                    <label rv-for="%rule% | prepend 'source[' | append ']'">Source</label>
                 </div>
 
                 <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}" >
-                    <input type="text" rv-id="%rule% | prepend 'source[' | append ']'" rv-value="rule.source" {{#unless __settings.admin}}disabled{{/unless}} />
-                    <label rv-for="%rule% | prepend 'source[' | append ']'">Source</label>
+                    <input type="text" rv-id="%rule% | prepend 'tracker[' | append ']'" rv-value="rule.tracker" {{#unless __settings.admin}}disabled{{/unless}} />
+                    <label rv-for="%rule% | prepend 'tracker[' | append ']'">Tracker</label>
                 </div>
 
                 <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}" >
