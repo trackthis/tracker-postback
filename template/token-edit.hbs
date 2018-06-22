@@ -23,12 +23,17 @@
 
         <div class="form-input">
             <input type="text" id="description" required pattern=".{4,}" rv-value="token.description" title="Minimum length: 4 characters" />
-            <label for="username">Description</label>
+            <label for="description">Description</label>
+        </div>
+
+        <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}">
+            <input type="text" id="tokenTarget" rv-value="token.target" {{#unless __settings.admin}}disabled{{/unless}} />
+            <label for="tokenTarget">Target</label>
         </div>
 
         <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}">
             <input type="datetime-local" id="tokenExpires" rv-value="token.expires | datetime" {{#unless __settings.admin}}disabled{{/unless}} />
-            <label for="username">Expires*</label>
+            <label for="tokenExpires">Expires*</label>
         </div>
 
         <small>

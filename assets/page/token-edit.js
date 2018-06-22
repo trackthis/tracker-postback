@@ -177,6 +177,7 @@ rv.data.form.savetoken = function( event, context ) {
     if (!rv.data.form.account.isAdmin) {
       delete postdata.expires;
       delete postdata.username;
+      delete postdata.target;
     }
 
     // Make the call
