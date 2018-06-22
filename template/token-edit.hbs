@@ -28,17 +28,18 @@
 
         <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}">
             <input type="text" id="tokenTarget" rv-value="token.target" {{#unless __settings.admin}}disabled{{/unless}} />
-            <label for="tokenTarget">Target</label>
+            <label for="tokenTarget">Target*</label>
         </div>
 
         <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}">
             <input type="datetime-local" id="tokenExpires" rv-value="token.expires | datetime" {{#unless __settings.admin}}disabled{{/unless}} />
-            <label for="tokenExpires">Expires*</label>
+            <label for="tokenExpires">Expires**</label>
         </div>
 
-        <small>
-            * Blank = no expiry date
-        </small>
+        <table>
+            <tr><td>*</td><td>Blank</td><td>= insert into tracker</td></tr>
+            <tr><td>**</td><td>Blank</td><td>= token doesn't expire</td></tr>
+        </table>
 
         <div class="form-actions">
             <button rv-on-click="form.savetoken" class="valign"><i class="material-icons">save</i><span>Save</span></button>
