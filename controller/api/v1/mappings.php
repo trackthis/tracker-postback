@@ -99,7 +99,7 @@ $router->respond('POST', '/api/v1/mappings', function( \Klein\Request $request )
     }
 
     // Writable fields
-    $mapping['remote']    = $request->param('remote'   , isset($mapping['remote'   ])?$mapping['remote'   ]:null);
+    $mapping['source']    = $request->param('source'   , isset($mapping['source'   ])?$mapping['source'   ]:null);
     $mapping['tracker']   = $request->param('tracker'  , isset($mapping['tracker'  ])?$mapping['tracker'  ]:null);
     $mapping['translate'] = $request->param('translate', isset($mapping['translate'])?$mapping['translate']:null);
 
