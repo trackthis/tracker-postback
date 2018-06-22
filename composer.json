@@ -24,6 +24,6 @@
     "xamin/handlebars.php": "@stable"
   },
   "require-dev": {
-    "heroku/heroku-buildpack-php": "dev-master"
+    "heroku/heroku-buildpack-php": "@stable"
   }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a02e49e0a6a76e0b9d5a8f8aa6ad4407",
+    "content-hash": "ab93a8709f12081a7e1b65107a0edc9b",
     "packages": [
         {
             "name": "fguillot/picodb",
@@ -407,7 +407,7 @@
     "packages-dev": [
         {
             "name": "heroku/heroku-buildpack-php",
-            "version": "dev-master",
+            "version": "v136",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heroku/heroku-buildpack-php.git",
@@ -456,7 +456,7 @@
         "fguillot/picodb": 0,
         "pimple/pimple": 0,
         "xamin/handlebars.php": 0,
-        "heroku/heroku-buildpack-php": 20
+        "heroku/heroku-buildpack-php": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
