@@ -83,13 +83,13 @@
                 </div>
 
                 <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}" >
-                    <input type="text" rv-id="%rule% | prepend 'tracker[' | append ']'" rv-value="rule.tracker" {{#unless __settings.admin}}disabled{{/unless}} />
-                    <label rv-for="%rule% | prepend 'tracker[' | append ']'">Tracker</label>
+                    <input type="text" rv-id="%rule% | prepend 'translate[' | append ']'" rv-value="rule.translate" {{#unless __settings.admin}}disabled{{/unless}} />
+                    <label rv-for="%rule% | prepend 'translate[' | append ']'">Translate</label>
                 </div>
 
                 <div class="form-input {{#unless __settings.admin}}disabled{{/unless}}" >
-                    <input type="text" rv-id="%rule% | prepend 'translate[' | append ']'" rv-value="rule.translate" {{#unless __settings.admin}}disabled{{/unless}} />
-                    <label rv-for="%rule% | prepend 'translate[' | append ']'">Translate</label>
+                    <input type="text" rv-id="%rule% | prepend 'field[' | append ']'" rv-value="rule.field" {{#unless __settings.admin}}disabled{{/unless}} />
+                    <label rv-for="%rule% | prepend 'field[' | append ']'">Field</label>
                 </div>
 
                 {{#if __settings.admin}}
