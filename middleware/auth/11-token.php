@@ -61,7 +61,8 @@ $router->respond(function () {
         'account' => $account,
         'method'  => 'api-token',
         'token'   => array(
-            'mappings' => $mappings
+            'target'   => $token['target'],
+            'mappings' => $mappings,
         ),
     );
 
