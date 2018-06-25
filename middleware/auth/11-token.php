@@ -51,9 +51,10 @@ $router->respond(function () {
     }
 
     // Decode settings
+    // API tokens can not have elevated privileges
     $account['settings']          = json_decode($account['settings'],true);
-    $account['settings']['admin'] = isset($account['settings']['admin']) ? !!$account['settings']['admin'] : false;
-    $account['settings']['token'] = $account['settings']['admin'] ? true : (isset($account['settings']['token']) ? !!$account['settings']['token'] : false);
+    $account['settings']['admin'] = false;
+    $account['settings']['token'] = false;
 
     // Insert the auth into the request
     $_REQUEST['auth'] = array(
