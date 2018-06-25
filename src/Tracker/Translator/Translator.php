@@ -2,6 +2,7 @@
 
 namespace Tracker\Translator;
 
+use Tracker\Translator\Transform\Fallback;
 use Tracker\Translator\Transform\Ip2Long;
 use Tracker\Translator\Transform\Optional;
 use Tracker\Translator\Transform\StringToTime;
@@ -39,10 +40,14 @@ class Translator {
 
         // Initialize the transforms
         $this->transforms = array(
+            Fallback::getName()     => new Fallback(),
             Ip2Long::getName()      => new Ip2Long(),
             Optional::getName()     => new Optional(),
             StringToTime::getName() => new StringToTime(),
         );
+
+        // Let's home they're all correct
+        $this->mappings = $mappings;
     }
 
     /**
@@ -72,9 +77,10 @@ class Translator {
             // Handle transformer functions
             if ( isset($mapping['translate']) && (substr($mapping['translate'],0,1)=='%') ) {
                 $argv        = str_getcsv(substr($mapping['translate'],1)," ");
-                $transformer = array_shift($tokens);
+                $transformer = array_shift($argv);
                 if(isset($this->transforms[$transformer])) {
-                    $value = $this->transforms[$transformer]->handle($argv,$value);
+                    $output[$field] = $this->transforms[$transformer]->handle($argv,$value);
+                    continue;
                 }
             }
 
@@ -82,34 +88,41 @@ class Translator {
             // Handles: "origin=target"
             // Handles: "DC|*=newValue"
             // Handles: "DC|{user}|{session}"
-            if (strpos($mapping['translate'],'&')!==false) {
-                $maps = str_getcsv($mapping['translate'],"&");
-                foreach ($maps as $map) {
+            $maps = str_getcsv($mapping['translate'],"&");
+            $org  = $value;
+            if(count($maps)) {
+                $value = null;
+            }
+            foreach ($maps as $map) {
 
-                    // Split filter & format
-                    $parts = str_getcsv($map,"=");
-                    if(count($parts)==1) array_unshift($parts,"/.*/");
-                    $filter = array_shift($parts);
-                    $format = implode('=',$parts);
+                // Split filter & format
+                $parts = str_getcsv($map,"=");
+                if(count($parts)==1) array_unshift($parts,"/.*/");
+                $filter = array_shift($parts);
+                $format = implode('=',$parts);
 
-                    // Filter may be glob
-                    if( (substr($filter,0,1)!=='/') && (strpos($filter,'*')!==false) ) {
-                        $filter = '/'.str_replace('*','.*',$filter).'/';
-                    }
-
-                    // Filter may be regex
-                    if ((substr($filter,0,1)==='/')) {
-                        if(!preg_match($filter,$value)) continue;
-                        $value = string_format($format,array_merge($record,$output));
-                        break;
-                    }
-
+                // Filter may be glob
+                if( (substr($filter,0,1)!=='/') && (strpos($filter,'*')!==false) ) {
+                    $filter = '/'.str_replace('*','.*',$filter).'/';
                 }
+
+                // Filter may be regex
+                if ( (substr($filter,0,1)==='/') ) {
+                    if (!preg_match($filter,$org)) {
+                        continue;
+                    }
+                } elseif ( $filter !== $org ) {
+                    continue;
+                }
+
+                // Write the new value
+                $value = string_format($format,array_merge($record,$output));
             }
 
             // Write it to the output field
             $output[$field] = $value;
         }
+
         return $output;
     }
 }
