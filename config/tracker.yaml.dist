@@ -1,0 +1,2 @@
+tracker:
+  default: mysql://user:password@localhost:3306/trackthistracker
