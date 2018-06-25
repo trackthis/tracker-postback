@@ -28,7 +28,7 @@ interface AdapterInterface {
      * Runs the given record through the translator & hands it over to the target
      *
      * @param array $bareRecord
-     * @return boolean|string
+     * @return integer|string
      * @throws \Exception
      */
     public function record( $bareRecord );
@@ -39,7 +39,7 @@ interface AdapterInterface {
      * This is called from the record function to actually pass it to the target
      *
      * @param $processedRecord
-     * @return boolean|string
+     * @return integer|string
      */
     public function write( $processedRecord );
 }
