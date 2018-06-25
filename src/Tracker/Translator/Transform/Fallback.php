@@ -2,11 +2,12 @@
 
 namespace Tracker\Translator\Transform;
 
-class Optional implements TransformInterface {
+class Fallback implements TransformInterface {
     public function handle($argv,$value) {
-        return $value ? $value : '';
+        if(is_null($value)) return $argv[0];
+        return $value;
     }
     public static function getName() {
-        return 'optional';
+        return 'ip2long';
     }
 }

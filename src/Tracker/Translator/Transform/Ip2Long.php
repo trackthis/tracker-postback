@@ -3,7 +3,7 @@
 namespace Tracker\Translator\Transform;
 
 class Ip2Long implements TransformInterface {
-    public function handle($value) {
+    public function handle($argv,$value) {
         return ip2long($value);
     }
     public static function getName() {

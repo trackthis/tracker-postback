@@ -71,15 +71,41 @@ class Translator {
 
             // Handle transformer functions
             if ( isset($mapping['translate']) && (substr($mapping['translate'],0,1)=='%') ) {
-                $transformer = substr($mapping['translate'],1);
+                $argv        = str_getcsv(substr($mapping['translate'],1)," ");
+                $transformer = array_shift($tokens);
                 if(isset($this->transforms[$transformer])) {
-                    $value = $this->transforms[$transformer]->handle($value);
+                    $value = $this->transforms[$transformer]->handle($argv,$value);
                 }
             }
 
-            // TODO: maps (org=new&org=new&...)
-            // TODO: fixed values
-            // TODO: string_format
+            // Actual mapping
+            // Handles: "origin=target"
+            // Handles: "DC|*=newValue"
+            // Handles: "DC|{user}|{session}"
+            if (strpos($mapping['translate'],'&')!==false) {
+                $maps = str_getcsv($mapping['translate'],"&");
+                foreach ($maps as $map) {
+
+                    // Split filter & format
+                    $parts = str_getcsv($map,"=");
+                    if(count($parts)==1) array_unshift($parts,"/.*/");
+                    $filter = array_shift($parts);
+                    $format = implode('=',$parts);
+
+                    // Filter may be glob
+                    if( (substr($filter,0,1)!=='/') && (strpos($filter,'*')!==false) ) {
+                        $filter = '/'.str_replace('*','.*',$filter).'/';
+                    }
+
+                    // Filter may be regex
+                    if ((substr($filter,0,1)==='/')) {
+                        if(!preg_match($filter,$value)) continue;
+                        $value = string_format($format,array_merge($record,$output));
+                        break;
+                    }
+
+                }
+            }
 
             // Write it to the output field
             $output[$field] = $value;
