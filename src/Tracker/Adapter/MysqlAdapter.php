@@ -32,7 +32,8 @@ class MysqlAdapter extends AbstractAdapter {
         }
 
         // Check if the table exists
-        $sql   = trim(sprintf("SELECT 1 FROM %s", $this->db->escapeIdentifier($processedRecord['%table%'])));
+        $table = $processedRecord['%table%'];
+        $sql   = trim(sprintf("SELECT 1 FROM %s", $this->db->escapeIdentifier($table)));
         try {
             $error = intval($this->db->execute($sql)->errorCode());
             if ($error) return "Given table does not exist";
@@ -40,12 +41,17 @@ class MysqlAdapter extends AbstractAdapter {
             return "Given table does not exist";
         }
 
-
-
-
-
-        var_dump($processedRecord);
-        die();
+        // Let's write then
+        unset($processedRecord['%table%']);
+        try {
+            $result = $this->db->table($table)->insert($processedRecord);
+            if (!$result) {
+                return 'idx_unique';
+            }
+            return 0;
+        } catch( \Exception $e ) {
+            return $e->getMessage();
+        }
     }
 
 }
