@@ -32,6 +32,9 @@ if(!function_exists('prnt')) {
                 case 'boolean':
                     $output .= ' ' . ($value?'true':'false') . PHP_EOL;
                     break;
+                case 'NULL':
+                    $output .= ' NULL' . PHP_EOL;
+                    break;
                 case 'string':
                 case 'integer':
                 case 'number':
