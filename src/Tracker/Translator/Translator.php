@@ -74,6 +74,12 @@ class Translator {
                 $value = isset($record[$mapping['source']]) ? $record[$mapping['source']] : null;
             }
 
+            // No translate = use value directly
+            if( (!is_string($mapping['translate'])) || (!strlen($mapping['translate'])) ) {
+                $output[$field] = $value;
+                continue;
+            }
+
             // Handle transformer functions
             if ( isset($mapping['translate']) && (substr($mapping['translate'],0,1)=='%') ) {
                 $argv        = str_getcsv(substr($mapping['translate'],1)," ");
