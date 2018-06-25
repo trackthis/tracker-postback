@@ -25,7 +25,27 @@ class MysqlAdapter extends AbstractAdapter {
      * @inheritdoc
      */
     public function write($processedRecord) {
-        // TODO: Implement write() method.
+
+        // Make sure we have the %table%
+        if(!isset($processedRecord['%table%'])) {
+            return "The record did not contain a target table";
+        }
+
+        // Check if the table exists
+        $sql   = trim(sprintf("SELECT 1 FROM %s", $this->db->escapeIdentifier($processedRecord['%table%'])));
+        try {
+            $error = intval($this->db->execute($sql)->errorCode());
+            if ($error) return "Given table does not exist";
+        } catch( \Exception $e ) {
+            return "Given table does not exist";
+        }
+
+
+
+
+
+        var_dump($processedRecord);
+        die();
     }
 
 }
