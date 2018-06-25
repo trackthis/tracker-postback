@@ -8,6 +8,6 @@ class Fallback implements TransformInterface {
         return $value;
     }
     public static function getName() {
-        return 'ip2long';
+        return 'fallback';
     }
 }
