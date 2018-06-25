@@ -11,8 +11,7 @@ abstract class Adapter {
      *
      * @param string $uri
      *
-     * @return AbstractAdapter
-     * @throws \Exception
+     * @return AbstractAdapter|null
      */
     public static function create( $uri ) {
 
@@ -22,7 +21,7 @@ abstract class Adapter {
 
         // Check if it actually exists
         if (!class_exists($className)) {
-            throw new \Exception("No adapter registered for '".strtolower($scheme)."' scheme.");
+            return null;
         }
 
         // Create & return
