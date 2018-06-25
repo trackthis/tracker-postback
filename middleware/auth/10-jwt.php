@@ -27,7 +27,7 @@ $router->respond(function () {
     }
 
     // Strip possible prefixes
-    $prefixes = array("Bearer ", "Token ");
+    $prefixes = array("JWT ", "Bearer ", "Token ");
     foreach ($prefixes as $prefix) {
         if (substr($raw, 0, strlen($prefix)) === $prefix) {
             $raw = substr($raw, strlen($prefix));
