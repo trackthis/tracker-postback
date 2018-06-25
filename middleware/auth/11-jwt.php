@@ -3,7 +3,6 @@
 /** @var \Klein\Klein $router */
 $router->respond(function () {
     global $_SERVICE;
-    $_REQUEST['auth'] = false;
 
     function url2b64($data) {
         if ($remainder = strlen($data) % 4) {

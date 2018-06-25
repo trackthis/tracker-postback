@@ -3,7 +3,6 @@
 /** @var \Klein\Klein $router */
 $router->respond(function () {
     global $_SERVICE;
-    $_REQUEST['auth'] = false;
 
     // Detect auth
     $raw = false;
