@@ -54,6 +54,61 @@ if(!function_exists('prnt')) {
     }
 }
 
+/**
+ * Flattens a deep array into a flat dot-separated array
+ *
+ * @param array $data
+ * @param string $parentKey
+ * @return array
+ */
+function array_flatten( $data, $parentKey = '' ) {
+    $output = array();
+    foreach ($data as $key => $value) {
+        $compositeKey = strlen($parentKey) ? $parentKey.'.'.$key : $key;
+        switch(gettype($value)) {
+            case 'object':
+                if (method_exists($value,'__toArray')) {
+                    $value = $value->__toArray();
+                } elseif (method_exists($value,'toArray')) {
+                    $value = $value->toArray();
+                } else {
+                    $value = (array) $value;
+                }
+            case 'array':
+                $output = array_merge($output, array_flatten($value, $compositeKey));
+                break;
+            default:
+                $output[$compositeKey] = $value;
+                break;
+        }
+    }
+    return $output;
+}
+
+// String formatter
+function string_format( $template, $data ) {
+    switch(gettype($data)) {
+        case 'boolean':
+        case 'integer':
+        case 'double':
+        case 'float':
+        case 'string':
+            $args = func_get_args();
+            array_shift($args);
+            return string_format($template, $args);
+        case 'object':
+        case 'array':
+            $data = array_flatten($data);
+            break;
+        default:
+            return $template;
+    }
+    foreach ($data as $key => $value) {
+        $template = str_replace(sprintf("{%s}", $key), $value, $template);
+    }
+    return $template;
+}
+
 if(!function_exists('random_character')) {
     function random_character( $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
         return substr($alphabet,rand(0,strlen($alphabet)-1),1);
