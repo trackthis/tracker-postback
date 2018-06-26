@@ -115,12 +115,17 @@ $router->respond('DELETE', '/api/v1/accounts/[:username]', function ($request) {
 
     // Fetch all API tokens
     $tokens = $odm->table('token')->eq('username', $account['username'])->findAllByColumn('id');
+    $result = true;
 
-    // Delete all mappings
-    $result = $odm->table('mapping')->in('token',$tokens)->remove();
+    // Attempt deletion only when we have tokens
+    if(count($tokens)) {
 
-    // Delete all API tokens
-    $result &= $odm->table('token')->in('id', $tokens)->remove();
+        // Delete all mappings
+        $result &= $odm->table('mapping')->in('token',$tokens)->remove();
+
+        // Delete all API tokens
+        $result &= $odm->table('token')->in('id', $tokens)->remove();
+    }
 
     // Delete the account itself
     $result &= $odm->table('account')->eq('username', $account['username'])->remove();
