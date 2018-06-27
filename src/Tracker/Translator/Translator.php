@@ -4,6 +4,7 @@ namespace Tracker\Translator;
 
 use Tracker\Translator\Transform\Fallback;
 use Tracker\Translator\Transform\Ip2Long;
+use Tracker\Translator\Transform\MD5;
 use Tracker\Translator\Transform\Optional;
 use Tracker\Translator\Transform\StringToTime;
 use Tracker\Translator\Transform\TransformInterface;
@@ -33,6 +34,8 @@ class Translator {
      */
     public function __construct( $mappings ) {
 
+        var_dump($mappings);
+
         // Ensure the mappings var is an array
         if (gettype($mappings) !== 'array') {
             throw new \Exception("Given mappings not an array");
@@ -42,6 +45,7 @@ class Translator {
         $this->transforms = array(
             Fallback::getName()     => new Fallback(),
             Ip2Long::getName()      => new Ip2Long(),
+            MD5::getName()          => new MD5(),
             Optional::getName()     => new Optional(),
             StringToTime::getName() => new StringToTime(),
         );
@@ -122,7 +126,7 @@ class Translator {
                 }
 
                 // Write the new value
-                $value = string_format($format,array_merge($record,$output));
+                $value = string_format($format,array_merge(array('gmdate'=>gmdate('Ymd')),$record,$output));
             }
 
             // Write it to the output field
