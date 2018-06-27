@@ -1,7 +1,8 @@
 <?php
 
-namespace Finwo\Pipe;
+namespace Finwo\Pipe\Reader;
 
+use Finwo\Pipe\Target;
 use PicoDb\Database;
 use PicoDb\UrlParser;
 
