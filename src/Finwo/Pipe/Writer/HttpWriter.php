@@ -25,7 +25,6 @@ class HttpWriter extends AbstractWriter {
         if($info['content_type']=='application/json') {
             try {
                 $response = json_decode($output,true);
-                var_dump($response);
                 if(key_exists('ok',$response) && (!$response['ok'])) return false;
             } catch( \Exception $e ) {
                 return false;
