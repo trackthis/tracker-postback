@@ -94,6 +94,7 @@ $router->respond('POST', '/api/v1/tokens', function( \Klein\Request $request ) {
     // Admin fields
     if($isAdmin) {
         $token['expires'] = $request->param('expires', isset($token['expires'])?$token['expires']:0);
+        $token['target' ] = $request->param('target' , isset($token['target' ])?$token['target' ]:0);
     }
 
     // Save the record
