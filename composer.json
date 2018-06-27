@@ -12,7 +12,10 @@
   "autoload": {
     "psr-4": {
       "": "src/"
-    }
+    },
+    "files": [
+      "src/commons.php"
+    ]
   },
   "require": {
     "klein/klein": "^2.1",
