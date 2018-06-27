@@ -24,6 +24,14 @@ if (isset($_SERVER['argc'])) {
 // DEBUG function
 // outputs yaml-like structure
 if(!function_exists('prnt')) {
+    /**
+     * Returns a variable in a yaml-like format
+     *
+     * @param mixed $data
+     * @param bool $ret
+     * @param string $prefix
+     * @return null|string
+     */
     function prnt( $data, $ret = false, $prefix = '' ) {
         $output = '';
         foreach ( $data as $key => $value ) {
@@ -58,6 +66,12 @@ if(!function_exists('prnt')) {
 }
 
 if(!function_exists('build_url')) {
+    /**
+     * Reverse of parse_url
+     *
+     * @param array $parts
+     * @return string
+     */
     function build_url(array $parts) {
         return (isset($parts['scheme']) ? "{$parts['scheme']}:" : '') .
             ((isset($parts['user']) || isset($parts['host'])) ? '//' : '') .
@@ -107,6 +121,14 @@ if(!function_exists('array_flatten')) {
 
 // String formatter
 if(!function_exists('string_format')) {
+    /**
+     * String formatter
+     *
+     * @param string $template
+     * @param array $data
+     *
+     * @return string
+     */
     function string_format( $template, $data ) {
         switch(gettype($data)) {
             case 'boolean':
@@ -132,12 +154,25 @@ if(!function_exists('string_format')) {
 }
 
 if(!function_exists('random_character')) {
+    /**
+     * Returns a random character from the given alphabet
+     *
+     * @param string $alphabet
+     * @return string
+     */
     function random_character( $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
         return substr($alphabet,rand(0,strlen($alphabet)-1),1);
     }
 }
 
 if(!function_exists('random_string')) {
+    /**
+     * Returns a string of random characters based on the (given) alphabet
+     *
+     * @param int $length
+     * @param string $alphabet
+     * @return string
+     */
     function random_string( $length = 8, $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
         return implode(array_map('random_character',array_fill(0,$length,$alphabet)));
     }
@@ -168,7 +203,7 @@ foreach (array_merge(
              glob(APPROOT . DS . 'service' . DS . '**' . DS . '*.php')
          ) as $filename
 ) {
-    require_once($filename);
+    require($filename);
 }
 
 // Initialize router
@@ -180,7 +215,7 @@ foreach (array_merge(
              glob(APPROOT . DS . 'middleware' . DS . '**' . DS . '*.php')
          ) as $filename
 ) {
-    require_once($filename);
+    require($filename);
 }
 
 // Initialize controllers
@@ -190,7 +225,7 @@ foreach (array_merge(
              glob(APPROOT . DS . 'controller' . DS . '**' . DS . '**' . DS . '*.php')
          ) as $filename
 ) {
-    require_once($filename);
+    require($filename);
 }
 
 // 404 handler
