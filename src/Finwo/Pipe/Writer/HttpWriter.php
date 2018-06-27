@@ -16,7 +16,6 @@ class HttpWriter extends AbstractWriter {
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
         $output  = curl_exec($ch);
         $info    = curl_getinfo($ch);
         curl_close($ch);
