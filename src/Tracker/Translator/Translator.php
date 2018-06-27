@@ -34,8 +34,6 @@ class Translator {
      */
     public function __construct( $mappings ) {
 
-        var_dump($mappings);
-
         // Ensure the mappings var is an array
         if (gettype($mappings) !== 'array') {
             throw new \Exception("Given mappings not an array");
@@ -88,6 +86,9 @@ class Translator {
             if ( isset($mapping['translate']) && (substr($mapping['translate'],0,1)=='%') ) {
                 $argv        = str_getcsv(substr($mapping['translate'],1)," ");
                 $transformer = array_shift($argv);
+                $argv = array_map(function($format) use ($record,$output) {
+                    return string_format($format,array_merge(array('gmdate'=>gmdate('Ymd')),$record,$output));
+                },$argv);
                 if(isset($this->transforms[$transformer])) {
                     $output[$field] = $this->transforms[$transformer]->handle($argv,$value);
                     continue;
