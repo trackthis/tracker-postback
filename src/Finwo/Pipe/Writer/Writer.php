@@ -34,7 +34,10 @@ abstract class Writer {
                 ? $writers[$chunk['target']]
                 : Writer::create($chunk['target']);
             $writers[$chunk['target']] = $writer;
-            $target->write($writer->write($chunk['data']));
+            $target->write(array(
+                'chunk'    => $chunk,
+                'response' => $writer->write($chunk['data']),
+            ));
         };
     }
 }
