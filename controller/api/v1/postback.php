@@ -26,9 +26,14 @@ $router->respond('GET', '/api/v1/postback', function ( \Klein\Request $request )
     }
 
     // Fetch the target
-    $token   = $_REQUEST['auth']['token'];
-    $target  = is_null($token['target']) ? db2uri(\Finwo\Framework\Config\Config::get('tracker.default')) : $token['target'];
-    $adapter = \Tracker\Adapter\Adapter::create($target);
+    $token      = $_REQUEST['auth']['token'];
+    $defaultUri = db2uri(\Finwo\Framework\Config\Config::get('tracker.default'));
+    $target     = is_null($token['target']) ? $defaultUri : $token['target'];
+    if ( $target !== $defaultUri ) {
+        $adapter = new \Tracker\Adapter\BufferAdapter($target); // Add buffer to non-default
+    } else {
+        $adapter    = \Tracker\Adapter\Adapter::create($target);
+    }
     if(is_null($adapter)) {
         http_response_code(422);
         die('{"error":422,"description":"Unprocessable Entity"}');
