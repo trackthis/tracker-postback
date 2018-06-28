@@ -57,5 +57,5 @@ return (new Target(new DatabaseReader(db2uri(Config::get('database')) . '?{"sort
     })
 
     // Write to DB again
-    ->pipe(new DatabaseWriter(getenv('DATABASE_URL'), $params))
+    ->pipe(new DatabaseWriter(db2uri(Config::get('database')), $params))
     ;
