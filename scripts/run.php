@@ -52,7 +52,6 @@ function main( $argc, $argv ) {
     $params['timeout'] = $params['timeout'] ? $params['timeout'] : 10;
     $startTime = isset($_SERVER['REQUEST_TIME']) ? intval($_SERVER['REQUEST_TIME']) : time();
     $stopTime = $startTime + $params['timeout'];
-    set_time_limit($params['timeout']);
 
     /** @var \Finwo\Pipe\Target $runner */
     // Load tasks at hand
@@ -61,6 +60,7 @@ function main( $argc, $argv ) {
 
     // Start processing
     while(time()<$stopTime) {
+        set_time_limit($params['timeout']*10);
         $runner->start->write(false);
     }
 }
