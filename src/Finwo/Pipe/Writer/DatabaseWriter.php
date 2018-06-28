@@ -28,10 +28,35 @@ class DatabaseWriter {
         $source           = build_url($settings);
         $this->db         = new Database(UrlParser::getInstance()->getSettings($source));
     }
-    public function __invoke( $chunk, Target $target ) {
-        if(!$this->db->table($this->table)->insert($chunk)) {
-            return $target->write(false);
+    public function __invoke( $command, Target $target ) {
+        reset($command);
+        $method = strtolower(key($command));
+        $data   = $command[key($command)];
+        $id     = is_array($data) ? (isset($data['id'])?$data['id']:false) : $data;
+
+        if($method=='upsert') {
+            $method = $id ? 'update' : 'insert';
         }
-        $target->write($this->db->getLastId());
+
+        switch($method) {
+            case 'update':
+                if(!$id) return $target->write(false);
+                if($this->db->table($this->table)->eq('id',$id)->update($data)) {
+                    return $target->write($id);
+                } else {
+                    return $target->write(false);
+                }
+            case 'insert':
+                if($this->db->table($this->table)->insert($data)) {
+                    return $target->write($this->db->getLastId());
+                } else {
+                    return $target->write(false);
+                }
+            case 'delete':
+                if(!$id) return $target->write(false);
+                return $target->write($this->db->table($this->table)->eq('id',$id)->remove());
+            default:
+                return $target->write(false);
+        }
     }
 }
