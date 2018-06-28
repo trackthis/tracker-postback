@@ -41,6 +41,13 @@ class MysqlAdapter extends AbstractAdapter {
             return "Given table does not exist";
         }
 
+        // Remove nulls
+        foreach ($processedRecord as $key => $value) {
+            if(is_null($value)) {
+                unset($processedRecord[$key]);
+            }
+        }
+
         // Let's write then
         unset($processedRecord['%table%']);
         try {
