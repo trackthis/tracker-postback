@@ -5,7 +5,7 @@ namespace Finwo\Pipe;
 class Target {
     /** @var callable */
     protected $cb = null;
-    /** @var callable */
+    /** @var Target */
     protected $next = null;
     public $start = null;
     public function __construct( $cb ) {
@@ -14,6 +14,7 @@ class Target {
     }
     public function write($chunk) {
         if(is_null($this->cb)) return $this;
+        if(is_null($chunk)&&(!is_null($this->next))) return $this->next->write(null);
         $cb = $this->cb;$cb($chunk,$this->next);
         return $this;
     }
