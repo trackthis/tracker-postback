@@ -11,6 +11,7 @@ class PaymentType implements TransformInterface {
     public function handle($argv,$value) {
         if(count($argv)) { $value = implode(' ',$argv); }
         if(isset($this->map[$value])) return $this->map[$value];
+        if(is_numeric($value)) return intval($value);
         return null;
     }
     public static function getName() {
