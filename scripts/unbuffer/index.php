@@ -1,16 +1,28 @@
 <?php
 
-if (!getenv('DATABASE_URL')) {
-    putenv('DATABASE_URL=mysql://user:pass@localhost/postbacktracker/buffer');
-}
-
+use Finwo\Framework\Config\Config;
 use Finwo\Pipe\Reader\DatabaseReader;
 use Finwo\Pipe\Target;
 use Finwo\Pipe\Writer\DatabaseWriter;
 use Finwo\Pipe\Writer\Writer;
 
+// Helper function
+if(!function_exists('db2uri')) {
+    function db2uri( $settings ) {
+        if(is_string($settings)) return $settings;
+        return build_url(array(
+            'scheme' => isset($settings['driver'])   ? $settings['driver']         : null,
+            'user'   => isset($settings['username']) ? $settings['username']       : null,
+            'pass'   => isset($settings['password']) ? $settings['password']       : null,
+            'host'   => isset($settings['hostname']) ? $settings['hostname']       : null,
+            'port'   => isset($settings['port'])     ? $settings['port']           : null,
+            'path'   => isset($settings['database']) ? ('/'.$settings['database']) : null,
+        ));
+    }
+}
+
 // Start with the database
-return (new Target(new DatabaseReader(getenv('DATABASE_URL') . '?{"sort":{"t_try":"asc"}}')))
+return (new Target(new DatabaseReader(db2uri(Config::get('database')) . '?{"sort":{"t_try":"asc"}}')))
 
     // EOF catch
     ->pipe(function( $row, Target $target ) {
