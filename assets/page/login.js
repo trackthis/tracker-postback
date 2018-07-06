@@ -1,23 +1,9 @@
-var _         = require('../lib/fw'),
-    base64url = require('base64url'),
-    crypto    = require('crypto'),
-    EC        = require('elliptic').ec,
-    query     = require('../lib/query');
-
-function sha256 (src) {
-  return crypto.createHash('sha256').update(src).digest();
-}
-
-// Generates private key with pbkdf2 (between 1e3 & 1e6 iterations)
-function generateSecret(username, password) {
-  var _hash  = sha256(username).toString('hex'),
-      result = 0;
-  while (_hash.length) {
-    result = ((result * 16) + parseInt(_hash.substr(0, 1), 16)) % (1e6 - 1e3);
-    _hash  = _hash.substr(1);
-  }
-  return crypto.pbkdf2Sync(password,username,result+1e3,64,'sha256');
-}
+const _              = require('../lib/fw'),
+      base64url      = require('base64url'),
+      EC             = require('elliptic').ec,
+      query          = require('../lib/query'),
+      sha256         = require('../lib/sha256'),
+      generateSecret = require('../lib/generateSecret');
 
 _('#loginform').each(function(el) {
   _(el).on('submit', function() {

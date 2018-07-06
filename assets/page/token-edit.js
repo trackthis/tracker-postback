@@ -2,8 +2,10 @@ window._      = require('../lib/fw');
 window._.ajax = require('../lib/ajax');
 window.rv     = require('../lib/rivets');
 
-var q      = require('../lib/query'),
-    data   = q.decode(window.location.search||'');
+const q           = require('../lib/query'),
+      data        = q.decode(window.location.search||''),
+      revert      = require('../lib/revert'),
+      fancyDialog = require('../lib/fancyDialog');
 
 // Prepare rv data
 token.account         = token.account || data.account || '';
@@ -11,38 +13,6 @@ rv.data.form.account  = { isAdmin: false };
 rv.data.form.rules    = [];
 rv.data.token         = token;
 rv.data.token.account = rv.data.token.account || rv.data.token.username;
-
-// Revert function for common savings
-function revert(orgs) {
-  if(!Array.isArray(orgs)) return;
-  orgs.forEach(function(org) {
-    if(!org.el) return;
-    if ( 'html'  in org ) org.el.innerHTML = org.html;
-    if ( 'text'  in org ) org.el.innerText = org.text;
-    if ( 'dis'   in org ) org.el.disabled  = org.dis;
-    if ( 'class' in org ) org.el.className = org.class;
-  });
-  return false;
-}
-
-// Upgrade a dialog after rivets
-function fancyDialog(target) {
-  if(Array.isArray(target)) return target.map(fancyDialog);
-  if(target.getAttribute('upgraded')) return true;
-  target.setAttribute('upgraded',1);
-  var cover = document.createElement('DIV');
-  // var close = document.createElement('I');
-  cover.className = 'cover';
-  // close.className = 'close material-icons';
-  // close.innerHTML = 'close';
-  target.parentNode.insertBefore(cover,target);
-  target.parentNode.insertBefore(target,cover);
-  // target.appendChild(close);
-  _(target).find('.close').on('click', function() {
-    target.close();
-  });
-  return true;
-}
 
 // RV actions
 rv.data.form.addrule = function( event, context ) {

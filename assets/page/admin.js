@@ -2,43 +2,11 @@ window._      = require('../lib/fw');
 window._.ajax = require('../lib/ajax');
 window.rv     = require('../lib/rivets');
 
-var crypto = require('crypto'),
-    EC     = require('elliptic').ec,
-    q      = require('../lib/query'),
-    data   = q.decode(window.location.search||'');
-
-function sha256 (src) {
-  return crypto.createHash('sha256').update(src).digest();
-}
-
-// Generates private key with pbkdf2 (between 1e3 & 1e6 iterations)
-function generateSecret(username, password) {
-  var _hash  = sha256(username).toString('hex'),
-      result = 0;
-  while (_hash.length) {
-    result = ((result * 16) + parseInt(_hash.substr(0, 1), 16)) % (1e6 - 1e3);
-    _hash  = _hash.substr(1);
-  }
-  return crypto.pbkdf2Sync(password,username,result+1e3,64,'sha256');
-}
-
-function fancyDialog(target) {
-  if(Array.isArray(target)) return target.map(fancyDialog);
-  if(target.getAttribute('upgraded')) return true;
-  target.setAttribute('upgraded',1);
-  var cover = document.createElement('DIV');
-  // var close = document.createElement('I');
-  cover.className = 'cover';
-  // close.className = 'close material-icons';
-  // close.innerHTML = 'close';
-  target.parentNode.insertBefore(cover,target);
-  target.parentNode.insertBefore(target,cover);
-  // target.appendChild(close);
-  _(target).find('.close').on('click', function() {
-    target.close();
-  });
-  return true;
-}
+const EC             = require('elliptic').ec,
+    q                = require('../lib/query'),
+    data             = q.decode(window.location.search||''),
+    generateSecret   = require('../lib/generateSecret'),
+    fancyDialog      = require('../lib/fancyDialog');
 
 function accountDelete( event, context ) {
   var el = this;
