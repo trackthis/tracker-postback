@@ -9,6 +9,6 @@ module.exports = function generateSecret(username, password) {
     result = ((result * 16) + parseInt(_hash.substr(0, 1), 16)) % 63317;
     _hash  = _hash.substr(1);
   }
-  console.log('Iterations:', 1e3+result);
+  // console.log('Iterations:', 1e3+result);
   return crypto.pbkdf2Sync(password,username,result+1e3,64,'sha256');
 };
