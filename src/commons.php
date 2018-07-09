@@ -8,6 +8,12 @@ if (!defined('APPROOT')) {
     define('APPROOT', rtrim(dirname(__DIR__), DS));
 }
 
+// Don't spam the logs
+error_reporting( E_ALL & ~E_DEPRECATED & ~E_STRICT );
+
+// Don't show the errors to users
+ini_set("display_errors", 0);
+
 // String formatter
 if(!function_exists('string_format')) {
     /**
