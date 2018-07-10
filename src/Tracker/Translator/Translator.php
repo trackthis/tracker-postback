@@ -54,7 +54,7 @@ class Translator {
 
         // Let's home they're all correct
         $this->mappings = $mappings;
-
+    }
 
     /**
      * Translate a record
