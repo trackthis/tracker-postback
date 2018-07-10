@@ -5,7 +5,9 @@ namespace Tracker\Translator\Transform;
 class PaymentType implements TransformInterface {
 
     protected $map = array(
-        'ideal' => 10,
+        'ideal'      => 10,
+        'creditcard' => 11,
+        'bancontact' => 436,
     );
 
     public function handle($argv,$value) {

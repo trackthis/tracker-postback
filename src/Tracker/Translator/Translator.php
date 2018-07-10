@@ -7,6 +7,7 @@ use Tracker\Translator\Transform\Ip2Long;
 use Tracker\Translator\Transform\MD5;
 use Tracker\Translator\Transform\Optional;
 use Tracker\Translator\Transform\PaymentType;
+use Tracker\Translator\Transform\StringToLower;
 use Tracker\Translator\Transform\StringToTime;
 use Tracker\Translator\Transform\TransformInterface;
 
@@ -42,12 +43,13 @@ class Translator {
 
         // Initialize the transforms
         $this->transforms = array(
-            Fallback::getName()     => new Fallback(),
-            Ip2Long::getName()      => new Ip2Long(),
-            MD5::getName()          => new MD5(),
-            Optional::getName()     => new Optional(),
-            PaymentType::getName()  => new PaymentType(),
-            StringToTime::getName() => new StringToTime(),
+            Fallback::getName()      => new Fallback(),
+            Ip2Long::getName()       => new Ip2Long(),
+            MD5::getName()           => new MD5(),
+            Optional::getName()      => new Optional(),
+            PaymentType::getName()   => new PaymentType(),
+            StringToTime::getName()  => new StringToTime(),
+            StringToLower::getName() => new StringToLower(),
         );
 
         // Let's home they're all correct
