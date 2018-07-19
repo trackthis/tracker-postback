@@ -31,7 +31,7 @@ $router->respond('GET', '/admin/[:username]', function( $request ) {
     }
 
     // Username verification
-    if( (!$username) || (!preg_match("/^[ a-zA-Z0-9\\-_]{3,}\$/", $username)) ) {
+    if( (!$username) || (!preg_match("/^[ a-zA-Z0-9\\-_\\.]{3,}\$/", $username)) ) {
         http_response_code(404);
         header('Content-Type: text/html');
         die($_SERVICE['template']('account-not-found', array(

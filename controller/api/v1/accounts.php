@@ -59,11 +59,11 @@ $router->respond('POST', '/api/v1/accounts', function( \Klein\Request $request )
     }
 
     // Validate given username
-    if(!preg_match("/^[ a-zA-Z0-9\\-_]{3,}\$/", $params['username'])) {
+    if(!preg_match("/^[ a-zA-Z0-9\\-_\\.]{3,}\$/", $params['username'])) {
         http_response_code(422);
         die(json_encode(array(
             "error"       => 422,
-            "description" => "The username did not meet the requirements: /^[ a-zA-Z0-9\\-_]{3,}\$/"
+            "description" => "The username did not meet the requirements: /^[ a-zA-Z0-9\\-_\\.]{3,}\$/"
         )));
     }
     /** @var \PicoDb\Database $odm */
