@@ -28,7 +28,7 @@ $router->respond('GET', '/api/v1/postback', function ( \Klein\Request $request )
     // Fetch the target
     $token      = $_REQUEST['auth']['token'];
     $defaultUri = db2uri(\Finwo\Framework\Config\Config::get('tracker.default'));
-    $target     = is_null($token['target']) ? $defaultUri : $token['target'];
+    $target     = empty($token['target']) ? $defaultUri : $token['target'];
     if ( $target !== $defaultUri ) {
         $adapter = new \Tracker\Adapter\BufferAdapter($target); // Add buffer to non-default
     } else {
