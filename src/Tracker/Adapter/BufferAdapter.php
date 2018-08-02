@@ -56,7 +56,7 @@ class BufferAdapter extends AbstractAdapter {
             'mappings' => json_encode($mappings),
             't_create' => time(),
             't_try'    => 0,
-            'data'     => jsoN_encode($processedRecord),
+            'data'     => json_encode($processedRecord),
         ));
     }
 
