@@ -4,3 +4,4 @@ vendor/
 .idea/
 fifo.*
 /tcpd
+/.gtm/
